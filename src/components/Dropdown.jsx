@@ -1,9 +1,9 @@
 function Dropdown({ dropdownLabel, options }) {
   return (
     <div>
-      <div className="select">
+      <div className="select flex flex-col">
         <label>{dropdownLabel}</label>
-        <select className="bg-gray-100 border border-gray-300 p-1 px-3 rounded-md my-2 w-64">
+        <select className="bg-gray-100 border border-gray-300 p-1 pl-3 my-2 rounded-md">
           <option value="" selected disabled hidden>
             {dropdownLabel}
           </option>
