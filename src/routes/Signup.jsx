@@ -8,7 +8,7 @@ function Signup() {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center items-center h-screen">
       <div className="border-2 rounded-md w-fit border-gray-300 m-5">
         <form id="signUpForm" onSubmit={onSubmit}>
           <div className="flex">
