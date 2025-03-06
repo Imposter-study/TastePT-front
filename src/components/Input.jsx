@@ -4,7 +4,7 @@ function Input({ inputLabel, isrequired, inputType }) {
 //   console.log(inputID);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col pt-3">
       <label className="">{inputLabel}</label>
       <input
         id={inputID}
