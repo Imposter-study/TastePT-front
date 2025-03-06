@@ -5,23 +5,35 @@ function Signup() {
   return (
     <div className="flex justify-center">
       <div className="border-2 rounded-md w-fit border-gray-300 m-5">
-        <form>
+        <form id="signUpForm" onSubmit={onSubmit}>
           <div className="flex">
             <div className="flex-1 p-5 min-w-[300px] w-full">
               <div className="pt-3">
-                <Input inputLabel="Email *" isrequired={true} />
+                <Input
+                  inputLabel="Email *"
+                  isrequired={true}
+                  inputType="email"
+                />
               </div>
               <div className="pt-3">
-                <Input inputLabel="Password *" isrequired={true} />
+                <Input
+                  inputLabel="Password *"
+                  isrequired={true}
+                  inputType="password"
+                />
               </div>
               <div className="pt-3">
-                <Input inputLabel="Confirm Password *" isrequired={true} />
+                <Input
+                  inputLabel="Confirm Password *"
+                  isrequired={true}
+                  inputType="password"
+                />
               </div>
               <div className="pt-3">
                 <Input inputLabel="Nickname *" isrequired={true} />
               </div>
               <div className="pt-3">
-                <Input inputLabel="Age" isrequired={false} />
+                <Input inputLabel="Age" isrequired={false} inputType="number" />
               </div>
             </div>
             <div className="flex-1 p-5 min-w-[300px] w-full">
