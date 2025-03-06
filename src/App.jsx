@@ -5,6 +5,7 @@ import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import Home from './routes/Home'
 import Navbar from './components/Navbar'
+import Signup from './routes/Signup'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -14,6 +15,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path='' element={<Home />} />
+        <Route path='signup/' element={<Signup />} />
       </Routes>
     </div>
   )
