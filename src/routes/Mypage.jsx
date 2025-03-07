@@ -28,7 +28,7 @@ function Mypage() {
             <img
               src={profileImgUrl}
               alt="프로필 이미지"
-              className="size-25 mb-3 rounded-full"
+              className="size-25 mb-3 rounded-full object-cover"
             />
             <label htmlFor="profileImg">
               <div className="text-sm p-1 px-4 border rounded-md w-full bg-gray-200">
