@@ -1,11 +1,22 @@
+import Button from "./Button";
+
 function Navbar() {
   return (
-    <div>
-      <div className="flex justify-between border-b-2 border-gray-300">
-        <div className="p-5 m-1">logo</div>
-        <div className="flex p-5">
-          <button className="bg-gray-200 text-black text-sm p-1 px-3 m-1 border border-gray-500 rounded-md">Sign up</button>
-          <button className="bg-black text-white text-sm p-1 px-3 m-1 border border-black rounded-md">Sign in</button>
+    <div className="fixed top-0 left-0 w-screen min-w-[100px] overflow-x-auto bg-white">
+      <div className="container mx-auto flex justify-between items-center border-b-2 border-gray-300 p-5">
+        <div className="m-1 font-bold text-lg">logo</div>
+        <div className="flex">
+          <div className="px-1">
+            <Button
+              buttonName="Sign up"
+              bgColor="gray"
+              textColor="black"
+              borderColor="gray"
+            />
+          </div>
+          <div className="px-1">
+            <Button buttonName="Sign in" />
+          </div>
         </div>
       </div>
     </div>
