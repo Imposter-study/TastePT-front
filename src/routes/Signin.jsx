@@ -1,3 +1,4 @@
+import Button from "../components/Button";
 import Input from "../components/Input";
 
 function Signin() {
@@ -12,9 +13,7 @@ function Signin() {
         <form onSubmit={onSubmit}>
           <Input inputLabel="Email" isrequired={true} inputType="email" />
           <Input inputLabel="Password" isrequired={true} inputType="password" />
-          <button className="bg-black text-white text-sm py-1 px-4 my-3 border border-black rounded-md w-full">
-            Sign in
-          </button>
+          <Button buttonName="Sign in" />
         </form>
         <a className="text-sm underline" href="">
           Forgot password?

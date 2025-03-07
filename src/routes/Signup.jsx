@@ -1,3 +1,4 @@
+import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
 import Input from "../components/Input";
 
@@ -44,7 +45,7 @@ function Signup() {
             </div>
           </div>
           <div className="flex justify-center p-10">
-            <button>Submit</button>
+            <Button buttonName="Sign up" />
           </div>
         </form>
       </div>
