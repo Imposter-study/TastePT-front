@@ -1,11 +1,23 @@
+import { useState } from "react";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
 import Input from "../components/Input";
 import defaultProfile from "/image.png";
 
 function Mypage() {
+  const [profileImgUrl, setProfileImgUrl] = useState(defaultProfile);
+
   const onSubmit = (event) => {
     event.preventDefault();
+  };
+
+  const onFileChange = (event) => {
+    event.preventDefault();
+    // console.log(event.target.files[0]);
+    const profileImgFile = event.target.files[0];
+    const profileImgUrl = URL.createObjectURL(profileImgFile);
+    // console.log(profileImgUrl);
+    setProfileImgUrl(profileImgUrl);
   };
 
   return (
@@ -14,14 +26,21 @@ function Mypage() {
         <div className="flex justify-center max-w-[300px]">
           <div className="flex flex-col items-center max-w-[150px]">
             <img
-              src={defaultProfile}
+              src={profileImgUrl}
               alt="프로필 이미지"
-              className="size-25 mb-3"
+              className="size-25 mb-3 rounded-full"
             />
-            <Button
-              buttonName="프로필 이미지 수정"
-              bgColor="gray"
-              textColor="black"
+            <label htmlFor="profileImg">
+              <div className="text-sm p-1 px-4 border rounded-md w-full bg-gray-200">
+                프로필 이미지 수정
+              </div>
+            </label>
+            <input
+              id="profileImg"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={onFileChange}
             />
           </div>
         </div>
