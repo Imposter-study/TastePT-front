@@ -1,4 +1,4 @@
-function Button({ buttonName, bgColor, textColor, borderColor }) {
+function Button({ buttonName, bgColor, textColor, borderColor, onClick }) {
   const btnColorList = {
     black: "bg-black",
     white: "bg-white",
@@ -22,16 +22,17 @@ function Button({ buttonName, bgColor, textColor, borderColor }) {
   };
 
   return (
-    <div>
+    <>
       <button
-        className={`text-sm p-2 px-4 m-1 border rounded-md 
+        className={`text-sm p-2 px-4 border rounded-md w-full
         ${btnColorList[bgColor] || "bg-black"} 
         ${textColorList[textColor] || "text-white"} 
         ${borderColorList[borderColor] || "border-black"}`}
+        onClick={onClick}
       >
         {buttonName}
       </button>
-    </div>
+    </>
   );
 }
 
