@@ -8,25 +8,6 @@ function Signup() {
   const baseURL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
 
-  // console.log("cookie :", document.cookie);
-
-  // axios
-  //   .get(`${baseURL}accounts/csrf/`, { withCredentials: true })
-  //   .then((response) => console.log("CSRF Token:", response.data.csrfToken))
-  //   .catch((error) => console.error("CSRF Token 가져오기 실패", error));
-
-  const getCSRFToken = async () => {
-    try {
-      const response = await axios.post(`${baseURL}accounts/csrf/`, {
-        withCredentials: true,
-      });
-      return response.data.csrfToken;
-    } catch (error) {
-      console.error("CSRF Token 가져오기 실패", error);
-      return null;
-    }
-  };
-
   const onSubmit = async (event) => {
     event.preventDefault();
     // console.log(event.target);
@@ -74,16 +55,6 @@ function Signup() {
       console.log(isDiet);
       // formData.append("diet", "N");
     }
-
-    const userData = {
-      email: signUpForm["email-input"].value,
-      password: signUpForm["password-input"].value,
-      password_confirm: signUpForm["confirmpassword-input"].value,
-      nickname: signUpForm["nickname-input"].value,
-    };
-
-    const csrfToken = await getCSRFToken(); // ✅ CSRF 토큰을 먼저 가져옴
-    console.log("CSRF TOKEN : ", csrfToken);
 
     axios
       .post(`${baseURL}accounts/`, formData, {
