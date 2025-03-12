@@ -1,8 +1,8 @@
-import Button from "../components/Button";
-import Dropdown from "../components/Dropdown";
-import Input from "../components/Input";
+import Button from "../../components/Button";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
 import { useNavigate } from "react-router-dom";
-import { publicAccountAPI } from "../api/accountApi";
+import { publicAccountAPI } from "../../api/accountApi";
 
 function Signup() {
   const navigate = useNavigate();

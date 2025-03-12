@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Button from "../components/Button";
-import Dropdown from "../components/Dropdown";
-import Input from "../components/Input";
+import Button from "../../components/Button";
+import Dropdown from "../../components/Dropdown";
+import Input from "../../components/Input";
 import defaultProfile from "/image.png";
 
 function Mypage() {

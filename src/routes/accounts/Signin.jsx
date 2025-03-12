@@ -1,7 +1,7 @@
-import Button from "../components/Button";
-import Input from "../components/Input";
+import Button from "../../components/Button";
+import Input from "../../components/Input";
 import { useNavigate } from "react-router-dom";
-import { publicAccountAPI } from "../api/accountApi";
+import { publicAccountAPI } from "../../api/accountApi";
 
 function Signin() {
   const navigate = useNavigate();
