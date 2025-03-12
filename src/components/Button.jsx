@@ -24,7 +24,7 @@ function Button({ buttonName, bgColor, textColor, borderColor, onClick }) {
   return (
     <>
       <button
-        className={`text-sm p-1 px-4 border rounded-md w-full
+        className={`text-sm p-1 px-4 border rounded-md w-full cursor-pointer
         ${btnColorList[bgColor] || "bg-black"} 
         ${textColorList[textColor] || "text-white"} 
         ${borderColorList[borderColor] || "border-black"}`}
