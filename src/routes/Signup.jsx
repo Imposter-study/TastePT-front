@@ -1,11 +1,10 @@
-import axios from "axios";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
 import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
+import { publicAccountAPI } from "../api/accountApi";
 
 function Signup() {
-  const apiURL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const onSubmit = async (event) => {
@@ -56,13 +55,8 @@ function Signup() {
       // formData.append("diet", "N");
     }
 
-    axios
-      .post(`${apiURL}accounts/`, formData, {
-        withCredentials: true,
-        headers: {
-          "X-CSRFToken": csrfToken, // ✅ CSRF 토큰을 요청 헤더에 포함
-        },
-      })
+    publicAccountAPI
+      .post("", formData)
       .then((response) => {
         console.log(response);
         alert("회원가입이 완료되었습니다.");

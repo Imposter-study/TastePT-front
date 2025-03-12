@@ -1,10 +1,9 @@
-import axios from "axios";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
+import { publicAccountAPI } from "../api/accountApi";
 
 function Signin() {
-  const apiURL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const onSubmit = (event) => {
@@ -16,8 +15,8 @@ function Signin() {
     const username = signInForm["email-input"].value;
     const password = signInForm["password-input"].value;
 
-    axios
-      .post(`${apiURL}accounts/signin/`, { username, password })
+    publicAccountAPI
+      .post(`signin/`, { username, password })
       .then((response) => {
         console.log(response);
         console.log("로그인 성공");
