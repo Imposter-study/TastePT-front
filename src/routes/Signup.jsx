@@ -5,7 +5,7 @@ import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
 
 function Signup() {
-  const baseURL = import.meta.env.VITE_BASE_URL;
+  const apiURL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   const onSubmit = async (event) => {
@@ -57,7 +57,7 @@ function Signup() {
     }
 
     axios
-      .post(`${baseURL}accounts/`, formData, {
+      .post(`${apiURL}accounts/`, formData, {
         withCredentials: true,
         headers: {
           "X-CSRFToken": csrfToken, // ✅ CSRF 토큰을 요청 헤더에 포함
