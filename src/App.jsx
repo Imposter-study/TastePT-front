@@ -7,6 +7,7 @@ import Signup from "./routes/accounts/Signup";
 import Signin from "./routes/accounts/Signin";
 import Mypage from "./routes/accounts/Mypage";
 import CreatePost from "./routes/community/CreatePost";
+import EditPost from "./routes/community/EditPost";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -20,6 +21,7 @@ function App() {
         <Route path="signin/" element={<Signin />} />
         <Route path="mypage/" element={<Mypage />} />
         <Route path="community/new/" element={<CreatePost />} />
+        <Route path="community/:postID/edit/" element={<EditPost />} />
       </Routes>
     </div>
   );
