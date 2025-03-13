@@ -90,6 +90,14 @@ const CreatePost = () => {
     return modifiedHtml; // 변환된 HTML 반환
   };
 
+  const handleCancel = () => {
+    const isConfirm = window.confirm("게시글 작성을 취소하시겠습니까?");
+
+    if (isConfirm) {
+      navigate("/community");
+    }
+  };
+
   // 게시글 제출 시 실행
   const onSubmit = async () => {
     const updatedHtml = await changeBase64toImgFile(title, editorContent);
@@ -135,7 +143,7 @@ const CreatePost = () => {
   ];
 
   return (
-    <div className="flex flex-col justify-center pt-20">
+    <div className="flex flex-col pt-20 h-screen">
       <input
         id="title-input"
         placeholder="title"
@@ -143,13 +151,25 @@ const CreatePost = () => {
         required
         onChange={changeTitle}
       />
-      <ReactQuill
-        value={editorContent}
-        onChange={changeContent}
-        modules={modules}
-        formats={formats}
-      />
-      <Button buttonName="완료" onClick={onSubmit} />
+      <div className="flex-grow overflow-y-auto py-5">
+        <ReactQuill
+          value={editorContent}
+          onChange={changeContent}
+          modules={modules}
+          formats={formats}
+          className="h-10/12"
+        />
+      </div>
+      <div className="flex justify-end py-3">
+        <div className="flex">
+          <div className="pl-5">
+            <Button buttonName="완료" onClick={onSubmit} />
+          </div>
+          <div className="pl-5">
+            <Button buttonName="취소" onClick={handleCancel} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
