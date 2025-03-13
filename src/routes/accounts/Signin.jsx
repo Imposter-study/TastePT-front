@@ -1,10 +1,31 @@
-import Button from "../components/Button";
-import Input from "../components/Input";
+import Button from "../../components/Button";
+import Input from "../../components/Input";
+import { useNavigate } from "react-router-dom";
+import { publicAccountAPI } from "../../api/accountApi";
 
 function Signin() {
+  const navigate = useNavigate();
+
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(event.target);
+    // console.log(event.target);
+    const signInForm = event.target;
+
+    // console.log(signInForm["email-input"].value);
+    const username = signInForm["email-input"].value;
+    const password = signInForm["password-input"].value;
+
+    publicAccountAPI
+      .post(`signin/`, { username, password })
+      .then((response) => {
+        console.log(response);
+        console.log("로그인 성공");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log("로그인 실패");
+      });
   };
 
   return (
