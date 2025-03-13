@@ -22,7 +22,7 @@ const CreatePost = () => {
     setEditorContent(value);
   };
 
-  const changeBase64toImgFile = async (htmlContent) => {
+  const changeBase64toImgFile = async (title, htmlContent) => {
     const imgRegex = /<img[^>]+src="([^">]+)"/g; // HTML 문자열에서 <img> 태그의 src 속성 값을 전부 추출
     let match;
     let modifiedHtml = htmlContent; // 변환된 HTML 저장
@@ -92,7 +92,7 @@ const CreatePost = () => {
 
   // 게시글 제출 시 실행
   const onSubmit = async () => {
-    const updatedHtml = await changeBase64toImgFile(editorContent);
+    const updatedHtml = await changeBase64toImgFile(title, editorContent);
 
     console.log(updatedHtml);
 
@@ -102,7 +102,7 @@ const CreatePost = () => {
         console.log("게시글 저장 성공");
         console.log(response.data.id);
         const postID = response.data.id;
-        navigate(`/${postID}`);
+        navigate(`/community/${postID}`);
       })
       .catch((error) => {
         console.error("게시글 저장 실패", error);
