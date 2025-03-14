@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import Comment from "../../components/Comment";
 
@@ -12,6 +12,8 @@ function PostDetail() {
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState({});
   const [comments, setComments] = useState([]);
+
+  const navigate = useNavigate();
 
   // 게시글 조회
   const getPost = async () => {
@@ -52,6 +54,30 @@ function PostDetail() {
     setComments((prev) => prev.filter((comment) => comment.id !== commentID));
   };
 
+  const goEdit = () => {
+    // 로그인한 사용자랑 게시글 작성자 확인 로직 추가
+    navigate(`/community/${postID}/edit`);
+  };
+
+  const handleDelete = (event) => {
+    event.preventDefault();
+    const deleteConfirm = window.confirm("게시글을 삭제하시겠습니까?");
+
+    if (deleteConfirm) {
+      axios
+        .delete(`${apiURL}community/${postID}/`)
+        .then((response) => {
+          console.log(response);
+          console.log("게시글 삭제 성공");
+          navigate("/community");
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log("게시글 삭제 실패");
+        });
+    }
+  };
+
   useEffect(() => {
     getPost();
   }, [postID]);
@@ -67,6 +93,25 @@ function PostDetail() {
             <h1 className="text-3xl font-bold">{post.title}</h1>
           </div>
           {/* {post.content} */}
+          <div className="flex justify-end">
+            <div className="pl-1">
+              <Button
+                buttonName="수정하기"
+                bgColor="gray"
+                textColor="black"
+                onClick={goEdit}
+              />
+            </div>
+
+            <div className="pl-1">
+              <Button
+                buttonName="삭제하기"
+                bgColor="gray"
+                textColor="black"
+                onClick={handleDelete}
+              />
+            </div>
+          </div>
           <div
             className="py-5"
             dangerouslySetInnerHTML={{
