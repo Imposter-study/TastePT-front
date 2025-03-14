@@ -1,28 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import defaultProfile from "/image.png";
 import Button from "./Button";
 import { commentAPI } from "../api/communityApi";
 
-function Comment({ commentID, onDeleteSuccess }) {
-  const apiURL = import.meta.env.VITE_API_URL;
-
-  const [loading, setLoading] = useState(true);
+function Comment({ comment: initialComment, onDeleteSuccess }) {
   const [isEdit, setEdit] = useState(false);
-  const [comment, setComment] = useState({});
+  const [comment, setComment] = useState(initialComment);
 
-  // 댓글 상세 조회
-  const getComment = async () => {
-    await commentAPI
-      .get(`${commentID}/`)
-      .then((response) => {
-        // console.log(response.data);
-        setComment(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  const commentID = initialComment.id;
 
   // 댓글 편집 모드로 변경
   const handleEditMode = () => {
@@ -46,7 +31,10 @@ function Comment({ commentID, onDeleteSuccess }) {
         .then((response) => {
           console.log(response);
           console.log("댓글 수정 성공");
-          getComment();
+          setComment((prevComment) => ({
+            ...prevComment,
+            content: response.data.content, // 새로운 내용으로 변경
+          }));
           commentEditForm.reset();
           setEdit(false);
         })
@@ -75,75 +63,55 @@ function Comment({ commentID, onDeleteSuccess }) {
     }
   };
 
-  useEffect(() => {
-    getComment();
-  }, [isEdit]);
-
   return (
-    <>
-      {loading ? (
-        <div>Loading ... </div>
-      ) : (
-        <div className="flex items-center border rounded-md mb-3 min-w-[300px]">
-          <div>
-            <img
-              src={defaultProfile}
-              alt="profile-img"
-              className="size-10 m-2"
-            />
-          </div>
-          <div className="flex flex-col w-full px-3">
-            <p className="font-bold">
-              {comment.author.nickname}{" "}
-              <span className="text-xs text-gray-400 font-light">
-                {comment.created_at.slice(0, 10)}
-              </span>
-            </p>
+    <div className="flex items-center border rounded-md mb-3 min-w-[300px]">
+      <div>
+        <img src={defaultProfile} alt="profile-img" className="size-10 m-2" />
+      </div>
+      <div className="flex flex-col w-full px-3">
+        <p className="font-bold">
+          {comment.author.nickname}{" "}
+          <span className="text-xs text-gray-400 font-light">
+            {comment.created_at.slice(0, 10)}
+          </span>
+        </p>
 
-            {/* 수정 여부에 따라 UI 변경 */}
-            {isEdit ? (
-              <form
-                id="comment-edit-form"
-                className="flex items-center space-x-2"
-                onSubmit={onEdit}
-              >
-                <input
-                  id="comment-input"
-                  className="border w-full"
-                  defaultValue={comment.content}
-                />
-                <div className="">
-                  <Button buttonName="수정완료" />
-                </div>
-              </form>
-            ) : (
-              <p>{comment.content}</p>
-            )}
-            <p className="text-sm cursor-pointer">
-              {isEdit ? (
-                <span
-                  className="hover:text-purple-500"
-                  onClick={handleEditMode}
-                >
-                  [수정 취소]
-                </span>
-              ) : (
-                <span
-                  className="hover:text-purple-500"
-                  onClick={handleEditMode}
-                >
-                  [수정]
-                </span>
-              )}
-              <span className="hover:text-purple-500" onClick={onDelete}>
-                {" "}
-                [삭제]
-              </span>
-            </p>
-          </div>
-        </div>
-      )}
-    </>
+        {/* 수정 여부에 따라 UI 변경 */}
+        {isEdit ? (
+          <form
+            id="comment-edit-form"
+            className="flex items-center space-x-2"
+            onSubmit={onEdit}
+          >
+            <input
+              id="comment-input"
+              className="border w-full"
+              defaultValue={comment.content}
+            />
+            <div className="">
+              <Button buttonName="수정완료" />
+            </div>
+          </form>
+        ) : (
+          <p>{comment.content}</p>
+        )}
+        <p className="text-sm cursor-pointer">
+          {isEdit ? (
+            <span className="hover:text-purple-500" onClick={handleEditMode}>
+              [수정 취소]
+            </span>
+          ) : (
+            <span className="hover:text-purple-500" onClick={handleEditMode}>
+              [수정]
+            </span>
+          )}
+          <span className="hover:text-purple-500" onClick={onDelete}>
+            {" "}
+            [삭제]
+          </span>
+        </p>
+      </div>
+    </div>
   );
 }
 

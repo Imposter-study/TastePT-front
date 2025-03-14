@@ -140,7 +140,7 @@ function PostDetail() {
             </div>
             {comments.map((comment) => (
               <Comment
-                commentID={comment.id}
+                comment={comment}
                 key={comment.id}
                 onDeleteSuccess={() => handleDeleteComment(comment.id)} // 삭제 성공 시 상태에서 제거
               />
