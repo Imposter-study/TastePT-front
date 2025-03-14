@@ -3,10 +3,14 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Home from "./routes/Home";
 import Navbar from "./components/Navbar";
-import Signup from "./routes/Signup";
-import Signin from "./routes/Signin";
-import Mypage from "./routes/Mypage";
-import Changepassword from "./routes/Changepassword";
+import Signup from "./routes/accounts/Signup";
+import Signin from "./routes/accounts/Signin";
+import Mypage from "./routes/accounts/Mypage";
+import Changepassword from "./routes/accounts/Changepassword";
+import CreatePost from "./routes/community/CreatePost";
+import EditPost from "./routes/community/EditPost";
+import PostDetail from "./routes/community/PostDetail";
+import PostList from "./routes/community/PostList";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -20,6 +24,10 @@ function App() {
         <Route path="signin/" element={<Signin />} />
         <Route path="mypage/" element={<Mypage />} />
         <Route path="password/" element={<Changepassword />} />
+        <Route path="community/" element={<PostList />} />
+        <Route path="community/new/" element={<CreatePost />} />
+        <Route path="community/:postID/" element={<PostDetail />} />
+        <Route path="community/:postID/edit/" element={<EditPost />} />
       </Routes>
     </div>
   );
