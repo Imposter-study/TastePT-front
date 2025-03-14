@@ -40,7 +40,7 @@ function Signin() {
               inputType="password"
             />
           </div>
-          <div className="pb-2">
+          <div className="flex justify-center pb-2">
             <Button buttonName="Sign in" />
           </div>
         </form>
