@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../../components/Button";
-import defaultProfile from "/image.png";
+import Comment from "../../components/Comment";
 
 function PostDetail() {
   const apiURL = import.meta.env.VITE_API_URL;
@@ -14,7 +14,7 @@ function PostDetail() {
 
   const getPost = async () => {
     const response = await axios.get(`${apiURL}community/${postID}/`);
-    console.log(response.data);
+    // console.log(response.data);
     setPost((prev) => response.data);
     setLoading((prev) => false);
   };
@@ -80,24 +80,7 @@ function PostDetail() {
               </form>
             </div>
             {post.comments.map((comment) => (
-              <div
-                className="flex border rounded-md mb-3 min-w-[200px]"
-                key={comment.id}
-              >
-                <div>
-                  <img
-                    src={defaultProfile}
-                    alt="profile-img"
-                    className="size-10 m-2"
-                  />
-                </div>
-                <div className="flex flex-col w-full px-3">
-                  <p className="font-bold">
-                    {comment.author.nickname} <span className="text-xs text-gray-400 font-light">{comment.created_at.slice(0,10)}</span>
-                  </p>
-                  <p>{comment.content}</p>
-                </div>
-              </div>
+              <Comment commentID={comment.id} key={comment.id} />
             ))}
           </div>
         </div>
