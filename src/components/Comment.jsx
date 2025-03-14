@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import defaultProfile from "/image.png";
 import Button from "./Button";
 
-function Comment({ commentID }) {
+function Comment({ commentID, onDeleteSuccess }) {
   const apiURL = import.meta.env.VITE_API_URL;
 
   const [loading, setLoading] = useState(true);
@@ -58,8 +58,21 @@ function Comment({ commentID }) {
   };
 
   // 댓글 삭제
-  const onDelete = () => {
-    // 댓글 삭제 로직
+  const onDelete = async () => {
+    const deleteConfirm = window.confirm("댓글을 삭제하시겠습니까?");
+
+    if (deleteConfirm) {
+      await axios
+        .delete(`${apiURL}community/comment/${commentID}/`)
+        .then((response) => {
+          console.log(response);
+          onDeleteSuccess(); // 부모에서 해당 댓글 제거
+          alert("댓글이 삭제되었습니다.");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   useEffect(() => {
@@ -87,7 +100,7 @@ function Comment({ commentID }) {
               </span>
             </p>
 
-            {/* 수정 여부에 따라  */}
+            {/* 수정 여부에 따라 UI 변경 */}
             {isEdit ? (
               <form
                 id="comment-edit-form"
@@ -107,10 +120,23 @@ function Comment({ commentID }) {
               <p>{comment.content}</p>
             )}
             <p className="text-sm cursor-pointer">
-              <span className="hover:text-purple-500" onClick={handleEditMode}>
-                [수정]
-              </span>{" "}
-              <span className="hover:text-purple-500" onClick={null}>
+              {isEdit ? (
+                <span
+                  className="hover:text-purple-500"
+                  onClick={handleEditMode}
+                >
+                  [수정 취소]
+                </span>
+              ) : (
+                <span
+                  className="hover:text-purple-500"
+                  onClick={handleEditMode}
+                >
+                  [수정]
+                </span>
+              )}
+              <span className="hover:text-purple-500" onClick={onDelete}>
+                {" "}
                 [삭제]
               </span>
             </p>

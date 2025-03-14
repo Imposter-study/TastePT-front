@@ -11,14 +11,18 @@ function PostDetail() {
   const { postID } = useParams();
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState({});
+  const [comments, setComments] = useState([]);
 
+  // 게시글 조회
   const getPost = async () => {
     const response = await axios.get(`${apiURL}community/${postID}/`);
     // console.log(response.data);
-    setPost((prev) => response.data);
-    setLoading((prev) => false);
+    setPost(response.data); // 게시글
+    setComments(response.data.comments); // 댓글
+    setLoading(false);
   };
 
+  // 댓글 작성
   const submitComment = (event) => {
     event.preventDefault();
     const comment = event.target;
@@ -31,13 +35,21 @@ function PostDetail() {
       .then((response) => {
         console.log(response);
         console.log("댓글 작성 성공");
+        setComments((prev) => [...prev, response.data]); // 새 댓글 추가
         comment.reset();
+        alert("댓글이 작성되었습니다.");
         getPost();
       })
       .catch((error) => {
         console.log(error);
         console.log("댓글 작성 실패");
+        alert("댓글 작성에 실패하였습니다.");
       });
+  };
+
+  // 댓글 삭제 성공 시 상태에서 제거
+  const handleDeleteComment = (commentID) => {
+    setComments((prev) => prev.filter((comment) => comment.id !== commentID));
   };
 
   useEffect(() => {
@@ -79,8 +91,12 @@ function PostDetail() {
                 </div>
               </form>
             </div>
-            {post.comments.map((comment) => (
-              <Comment commentID={comment.id} key={comment.id} />
+            {comments.map((comment) => (
+              <Comment
+                commentID={comment.id}
+                key={comment.id}
+                onDeleteSuccess={() => handleDeleteComment(comment.id)} // 삭제 성공 시 상태에서 제거
+              />
             ))}
           </div>
         </div>
