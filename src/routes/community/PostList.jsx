@@ -1,17 +1,15 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../../components/Button";
 import defaultImage from "/no-image.png";
+import { publicCommunityAPI } from "../../api/communityApi";
 
 function PostList() {
-  const apiURL = import.meta.env.VITE_API_URL;
-  const baseURL = import.meta.env;
   const [loading, setLoading] = useState(true);
   const [postList, setPostList] = useState([]);
 
   const getPostList = async () => {
-    const response = await axios.get(`${apiURL}community/`);
+    const response = await publicCommunityAPI.get(``);
     console.log(response.data);
     setPostList(response.data);
     setLoading(false);

@@ -1,9 +1,12 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css"; // 기본 스타일
 import Button from "../../components/Button";
+import {
+  privateCommunityAPI,
+  publicCommunityAPI,
+} from "../../api/communityApi";
 
 function EditPost() {
   const apiURL = import.meta.env.VITE_API_URL;
@@ -16,7 +19,7 @@ function EditPost() {
   const [post, setPost] = useState({});
 
   const getPost = async () => {
-    const response = await axios.get(`${apiURL}community/${postID}`);
+    const response = await publicCommunityAPI.get(`${postID}`);
     console.log(response.data);
     setPost((prev) => response.data);
     setLoading((prev) => false);
@@ -74,15 +77,15 @@ function EditPost() {
           const formData = new FormData();
           formData.append("image", file);
 
-          const response = await fetch(`${apiURL}community/upload-image/`, {
-            method: "POST",
-            body: formData,
-          });
+          const response = await publicCommunityAPI.post(
+            "upload-image/",
+            formData
+          );
+          console.log("axios로 변경해서 전송 완료");
+          console.log(response);
 
-          const data = await response.json();
-
-          if (response.ok) {
-            const uploadedImageUrl = data.file_path;
+          if (response.status === 201) {
+            const uploadedImageUrl = response.data.file_path;
 
             // HTML 내 Base64 URL을 업로드된 이미지 URL로 교체
             modifiedHtml = modifiedHtml.replace(base64Image, uploadedImageUrl);
@@ -112,8 +115,8 @@ function EditPost() {
     const updatedHtml = await changeBase64toImgFile(post.title, post.content);
     console.log(updatedHtml);
 
-    axios
-      .put(`${apiURL}community/${postID}/`, {
+    privateCommunityAPI
+      .put(`${postID}/`, {
         title: post.title,
         content: updatedHtml,
       })

@@ -1,11 +1,13 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import Comment from "../../components/Comment";
+import {
+  privateCommunityAPI,
+  publicCommunityAPI,
+} from "../../api/communityApi";
 
 function PostDetail() {
-  const apiURL = import.meta.env.VITE_API_URL;
   const baseURL = import.meta.env.VITE_BASE_URL;
 
   const { postID } = useParams();
@@ -17,7 +19,7 @@ function PostDetail() {
 
   // 게시글 조회
   const getPost = async () => {
-    const response = await axios.get(`${apiURL}community/${postID}/`);
+    const response = await publicCommunityAPI.get(`${postID}/`);
     // console.log(response.data);
     setPost(response.data); // 게시글
     setComments(response.data.comments); // 댓글
@@ -30,8 +32,8 @@ function PostDetail() {
     const comment = event.target;
     console.log(comment["comment-input"].value);
 
-    axios
-      .post(`${apiURL}community/${postID}/comment/`, {
+    privateCommunityAPI
+      .post(`${postID}/comment/`, {
         content: comment["comment-input"].value,
       })
       .then((response) => {
@@ -64,8 +66,8 @@ function PostDetail() {
     const deleteConfirm = window.confirm("게시글을 삭제하시겠습니까?");
 
     if (deleteConfirm) {
-      axios
-        .delete(`${apiURL}community/${postID}/`)
+      privateCommunityAPI
+        .delete(`${postID}/`)
         .then((response) => {
           console.log(response);
           console.log("게시글 삭제 성공");

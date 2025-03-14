@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css"; // 기본 스타일
-import axios from "axios";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
+import {
+  privateCommunityAPI,
+  publicCommunityAPI,
+} from "../../api/communityApi";
 
 // 이미지 업로드를 위한 컴포넌트
 const CreatePost = () => {
-  const apiURL = import.meta.env.VITE_API_URL;
-
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
@@ -65,15 +66,15 @@ const CreatePost = () => {
           const formData = new FormData();
           formData.append("image", file);
 
-          const response = await fetch(`${apiURL}community/upload-image/`, {
-            method: "POST",
-            body: formData,
-          });
+          const response = await publicCommunityAPI.post(
+            "upload-image/",
+            formData
+          );
+          console.log("axios로 변경해서 전송 완료");
+          console.log(response);
 
-          const data = await response.json();
-
-          if (response.ok) {
-            const uploadedImageUrl = data.file_path;
+          if (response.status === 201) {
+            const uploadedImageUrl = response.data.file_path;
 
             // HTML 내 Base64 URL을 업로드된 이미지 URL로 교체
             modifiedHtml = modifiedHtml.replace(base64Image, uploadedImageUrl);
@@ -104,8 +105,8 @@ const CreatePost = () => {
 
     console.log(updatedHtml);
 
-    axios
-      .post(`${apiURL}community/`, { title, content: updatedHtml }) // 변환된 HTML 저장
+    privateCommunityAPI
+      .post(``, { title, content: updatedHtml }) // 변환된 HTML 저장
       .then((response) => {
         console.log("게시글 저장 성공");
         console.log(response.data.id);

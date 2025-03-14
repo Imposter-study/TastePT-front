@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import defaultProfile from "/image.png";
 import Button from "./Button";
+import { commentAPI } from "../api/communityApi";
 
 function Comment({ commentID, onDeleteSuccess }) {
   const apiURL = import.meta.env.VITE_API_URL;
@@ -12,8 +12,8 @@ function Comment({ commentID, onDeleteSuccess }) {
 
   // 댓글 상세 조회
   const getComment = async () => {
-    await axios
-      .get(`${apiURL}community/comment/${commentID}/`)
+    await commentAPI
+      .get(`${commentID}/`)
       .then((response) => {
         // console.log(response.data);
         setComment(response.data);
@@ -39,8 +39,8 @@ function Comment({ commentID, onDeleteSuccess }) {
       const commentEditForm = event.target;
       console.log(commentEditForm["comment-input"].value);
 
-      axios
-        .put(`${apiURL}community/comment/${commentID}/`, {
+      commentAPI
+        .put(`${commentID}/`, {
           content: commentEditForm["comment-input"].value,
         })
         .then((response) => {
@@ -62,8 +62,8 @@ function Comment({ commentID, onDeleteSuccess }) {
     const deleteConfirm = window.confirm("댓글을 삭제하시겠습니까?");
 
     if (deleteConfirm) {
-      await axios
-        .delete(`${apiURL}community/comment/${commentID}/`)
+      await commentAPI
+        .delete(`${commentID}/`)
         .then((response) => {
           console.log(response);
           onDeleteSuccess(); // 부모에서 해당 댓글 제거
