@@ -103,7 +103,7 @@ function EditPost() {
     const isConfirm = window.confirm("게시글 수정을 취소하시겠습니까?");
 
     if (isConfirm) {
-      navigate("/community");
+      navigate(`/community/${postID}`);
     }
   };
 
