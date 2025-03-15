@@ -11,6 +11,7 @@ import CreatePost from "./routes/community/CreatePost";
 import EditPost from "./routes/community/EditPost";
 import PostDetail from "./routes/community/PostDetail";
 import PostList from "./routes/community/PostList";
+import Profile from "./routes/accounts/Profile";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,6 +24,7 @@ function App() {
         <Route path="signup/" element={<Signup />} />
         <Route path="signin/" element={<Signin />} />
         <Route path="mypage/" element={<Mypage />} />
+        <Route path=":nickname/" element={<Profile />} />
         <Route path="password/" element={<Changepassword />} />
         <Route path="community/" element={<PostList />} />
         <Route path="community/new/" element={<CreatePost />} />
