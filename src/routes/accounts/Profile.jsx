@@ -4,6 +4,7 @@ import defaultProfile from "/image.png";
 import Button from "../../components/Button";
 import { publicAccountAPI } from "../../api/accountApi";
 import { useParams } from "react-router-dom";
+import CheckBox from "../../components/CheckBox";
 
 function Profile() {
   const { nickname } = useParams();
@@ -38,10 +39,7 @@ function Profile() {
           </div>
           <div className="flex">
             <div>
-              <DisabledInput
-                inputLabel="Email"
-                inputValue="testuser@test.com"
-              />
+              <DisabledInput inputLabel="Email" inputValue={user.email} />
               <DisabledInput inputLabel="Nickname" inputValue={user.nickname} />
               <DisabledInput inputLabel="Age" inputValue={user.age || "-"} />
               <DisabledInput
@@ -50,14 +48,25 @@ function Profile() {
               />
             </div>
             <div>
-              <DisabledInput inputLabel="Diet" inputValue="다이어트 유 or 무" />
+              {/* 다이어트 여부 */}
               <DisabledInput
-                inputLabel="Preferred Cuisine"
-                inputValue="다이어트 유 or 무"
+                inputLabel="Diet"
+                inputValue={user.diet ? "다이어트 중" : "안 다이어트 중"}
               />
-              <DisabledInput
-                inputLabel="Allergy"
-                inputValue="땅콩, 아몬드 ..."
+              {/* 선호 요리 */}
+              <CheckBox
+                boxTitle="Preferred Cuisine"
+                componentList={user.preferred_cuisine}
+                disabled={true}
+                defaultChecked={true}
+              />
+
+              {/* 알러지 */} 
+              <CheckBox
+                boxTitle="Allergy"
+                componentList={user.allergies}
+                disabled={true}
+                defaultChecked={true}
               />
             </div>
           </div>
