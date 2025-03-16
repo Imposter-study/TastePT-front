@@ -1,11 +1,38 @@
 import Button from "../../components/Button";
+import CheckBox from "../../components/CheckBox";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { publicAccountAPI } from "../../api/accountApi";
 
 function Signup() {
   const navigate = useNavigate();
+  const [allergyList, setAllergyList] = useState([]);
+  const [preferredCuisineList, setPreferredCuisineList] = useState([]);
+  const [selectedAllergyList, setSelectedAllergyList] = useState([]);
+  const [selectedPreferredCuisineList, setSelectedPreferredCuisineList] =
+    useState([]);
+
+  const getAllergyList = () => {
+    publicAccountAPI.get("allergies_list/").then((response) => {
+      // console.log(response);
+      // console.log(response.data);
+      const allergies = response.data.map((allergy) => allergy.ingredient);
+      setAllergyList(allergies);
+    });
+  };
+
+  const getPreferredCuisineList = () => {
+    publicAccountAPI.get("preferredCuisine_list/").then((response) => {
+      // console.log(response);
+      // console.log(response.data);
+      const preferredCuisines = response.data.map(
+        (preferredCuisine) => preferredCuisine.cuisine
+      );
+      setPreferredCuisineList(preferredCuisines);
+    });
+  };
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -40,19 +67,32 @@ function Signup() {
     }
 
     // 알러지
-    // 추가 예정
+    console.log(selectedAllergyList);
+    console.log(typeof selectedAllergyList);
+    if (selectedAllergyList.length > 0) {
+      // 각각의 알러지 항목을 별도로 추가
+      selectedAllergyList.forEach((allergy) => {
+        formData.append("allergies", allergy);
+      });
+    }
 
     // 선호 요리
-    // 추가 예정
+    console.log(selectedPreferredCuisineList);
+    if (selectedPreferredCuisineList.length > 0) {
+      // 각각의 선호 요리 항목을 별도로 추가
+      selectedPreferredCuisineList.forEach((cuisine) => {
+        formData.append("preferred_cuisine", cuisine);
+      });
+    }
 
-    // 다이어트 여부 (백엔드 모델에 없음)
+    // 다이어트 여부
     const isDiet = signUpForm["diet-input"].value;
     if (isDiet === "유") {
       console.log(isDiet);
-      // formData.append("diet", "Y");
+      formData.append("diet", true);
     } else if (isDiet === "무") {
       console.log(isDiet);
-      // formData.append("diet", "N");
+      formData.append("diet", false);
     }
 
     publicAccountAPI
@@ -72,44 +112,67 @@ function Signup() {
       });
   };
 
+  useEffect(() => {
+    getAllergyList();
+    getPreferredCuisineList();
+  }, []);
+
   return (
     <div className="flex justify-center items-center min-h-screen pt-20">
       <div className="border-2 rounded-md w-fit border-gray-300 m-5">
         <form id="signUpForm" onSubmit={onSubmit}>
           <div className="flex">
             <div className="flex">
+              {/* 왼쪽 컨테이너 */}
               <div className="flex-1 p-5 min-w-[300px] w-full">
+                {/* 이메일 */}
                 <Input
                   inputLabel="Email *"
                   isrequired={true}
                   inputType="email"
                 />
+
+                {/* 패스워드 */}
                 <Input
                   inputLabel="Password *"
                   isrequired={true}
                   inputType="password"
                 />
+
+                {/* 확인 패스워드 */}
                 <Input
                   inputLabel="Confirm Password *"
                   isrequired={true}
                   inputType="password"
                 />
+
+                {/* 닉네임 */}
                 <Input inputLabel="Nickname *" isrequired={true} />
+
+                {/* 나이 */}
                 <Input inputLabel="Age" isrequired={false} inputType="number" />
               </div>
+
+              {/* 오른쪽 컨테이너 */}
               <div className="flex-1 p-5 min-w-[300px] w-full">
+                {/* 성별 */}
                 <Dropdown dropdownLabel="Gender" options={["남자", "여자"]} />
-                <Dropdown
-                  dropdownLabel="Allerge"
-                  options={["알러지1", "알러지2", "Other"]}
+
+                {/* 다이어트 여부 */}
+                <Dropdown dropdownLabel="Diet" options={["True", "False"]} />
+
+                {/* 알러지 */}
+                <CheckBox
+                  boxTitle="Allergy"
+                  componentList={allergyList}
+                  selectedData={setSelectedAllergyList}
                 />
-                <Dropdown
-                  dropdownLabel="Preferred cuisine"
-                  options={["cuisine1", "cuisine2", "cuisine3"]}
-                />
-                <Dropdown
-                  dropdownLabel="Diet"
-                  options={["유", "무", "Other"]}
+
+                {/* 선호 요리 */}
+                <CheckBox
+                  boxTitle="Preferred cuisine"
+                  componentList={preferredCuisineList}
+                  selectedData={setSelectedPreferredCuisineList}
                 />
               </div>
             </div>

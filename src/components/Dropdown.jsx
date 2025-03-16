@@ -10,8 +10,9 @@ function Dropdown({ dropdownLabel, options }) {
         <select
           id={optionID}
           className="bg-gray-100 border border-gray-300 p-1 pl-3 my-2 rounded-md"
+          defaultValue=""
         >
-          <option value="" selected disabled hidden>
+          <option value="" disabled hidden>
             {dropdownLabel}
           </option>
           {options.map((option, idx) => (
