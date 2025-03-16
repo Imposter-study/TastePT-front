@@ -115,7 +115,7 @@ function Signup() {
             </div>
           </div>
           <div className="flex justify-center">
-            <div className="w-2/5 py-10">
+            <div className="flex justify-center w-2/5 py-10">
               <Button buttonName="Submit" />
             </div>
           </div>

@@ -18,7 +18,7 @@ function Changepassword() {
             inputType="password"
           />
         </div>
-        <div className="py-5">
+        <div className="flex justify-center py-5">
           <Button buttonName="Change Password" />
         </div>
       </div>
