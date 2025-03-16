@@ -12,10 +12,9 @@ import EditPost from "./routes/community/EditPost";
 import PostDetail from "./routes/community/PostDetail";
 import PostList from "./routes/community/PostList";
 import Profile from "./routes/accounts/Profile";
+import ChatBot from "./routes/ChatBot";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <div className="container mx-auto">
       <Navbar />
@@ -30,6 +29,7 @@ function App() {
         <Route path="community/new/" element={<CreatePost />} />
         <Route path="community/:postID/" element={<PostDetail />} />
         <Route path="community/:postID/edit/" element={<EditPost />} />
+        <Route path="chatbot/" element={<ChatBot />} />
       </Routes>
     </div>
   );
