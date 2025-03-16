@@ -1,4 +1,5 @@
 import Button from "../components/Button";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -8,7 +9,9 @@ function Home() {
           <strong className="text-black text-6xl m-3 mt-5 pt-10 ">맛P.T</strong>
           <p className="text-gray-500 text-2xl m-2">subtitle</p>
           <div className="m-2">
-            <Button buttonName="start" />
+            <Link to="/chatbot">
+              <Button buttonName="start" />
+            </Link>
           </div>
         </div>
       </div>
