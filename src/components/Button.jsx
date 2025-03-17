@@ -1,4 +1,11 @@
-function Button({ buttonName, bgColor, textColor, borderColor, onClick }) {
+function Button({
+  buttonName,
+  bgColor,
+  textColor,
+  borderColor,
+  onClick,
+  textSize,
+}) {
   const btnColorList = {
     black: "bg-black",
     white: "bg-white",
@@ -17,17 +24,25 @@ function Button({ buttonName, bgColor, textColor, borderColor, onClick }) {
     black: "border-black",
     white: "border-white",
     gray: "border-gray-500",
+    gray4: "border-gray-400",
     yellow: "border-yellow-300",
     red: "border-red-500",
+  };
+
+  const textSizeList = {
+    sm: "text-sm",
+    md: "text-md",
+    lg: "text-lg",
   };
 
   return (
     <>
       <button
-        className={`text-sm p-1 px-4 border rounded-md min-w-max max-w-full cursor-pointer
+        className={`p-1 px-4 border rounded-md min-w-max max-w-full cursor-pointer
         ${btnColorList[bgColor] || "bg-black"} 
         ${textColorList[textColor] || "text-white"} 
-        ${borderColorList[borderColor] || "border-black"}`}
+        ${borderColorList[borderColor] || "border-black"}
+        ${textSizeList[textSize] || "text-sm"}`}
         onClick={onClick}
       >
         {buttonName}
