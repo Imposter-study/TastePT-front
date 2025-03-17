@@ -4,7 +4,7 @@ import "react-quill-new/dist/quill.snow.css"; // 기본 스타일
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import { privateCommunityAPI } from "../../api/communityApi";
-import { changeBase64toImgFile } from "../../utils/imageUtils";
+import { changeBase64toImgFile, urlToImageFile } from "../../utils/imageUtils";
 import { getQuillModules, getQuillFormats } from "../../utils/quillUtils";
 
 // 이미지 업로드를 위한 컴포넌트
@@ -35,12 +35,24 @@ const CreatePost = () => {
 
   // 게시글 제출 시 실행
   const onSubmit = async () => {
-    const updatedHtml = await changeBase64toImgFile(title, editorContent);
+    const { modifiedHtml, thumbnailUrl } = await changeBase64toImgFile(
+      title,
+      editorContent
+    );
 
-    console.log(updatedHtml);
+    // console.log(typeof thumbnailUrl);
+    // console.log(thumbnailUrl);
+
+    const fileName = thumbnailUrl.split("/").pop();
+    const thumbnailFile = await urlToImageFile(thumbnailUrl, fileName);
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", modifiedHtml);
+    formData.append("thumbnail", thumbnailFile);
 
     privateCommunityAPI
-      .post(``, { title, content: updatedHtml }) // 변환된 HTML 저장
+      .post(``, formData)
       .then((response) => {
         console.log("게시글 저장 성공");
         console.log(response.data.id);

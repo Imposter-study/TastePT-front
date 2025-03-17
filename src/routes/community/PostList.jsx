@@ -46,25 +46,20 @@ function PostList() {
           <div className="">
             {postList.map((post) => (
               <Link to={`/community/${post.id}`} key={post.id}>
-                <div className="flex my-5">
+                <div className="flex my-5 min-w-[700px]">
                   <div className="m-1 p-1">
                     <img
-                      src={defaultImage}
+                      src={post.thumbnail ? post.thumbnail : defaultImage}
                       alt="thumbnail"
-                      className="size-15"
+                      className="size-15 object-contain"
                     />
                   </div>
                   <div className="flex flex-col justify-center">
+                    {/* 게시글 제목 */}
                     <h2 className="font-bold text-xl">{post.title}</h2>
-                    {/* <div className="text-gray-400"
-                  dangerouslySetInnerHTML={{
-                    __html: post.content
-                      .replace(/src="\/media\//g, `src="${baseURL}media/`)
-                      .slice(0, 100),
-                  }}
-                /> */}
+                    {/* 게시글 내용 */}
                     <div className="max-w-[800px] text-gray-400">
-                      {extractString(post.content).slice(0, 100)}...
+                      {extractString(post.content).slice(0, 50)}...
                     </div>
                   </div>
                 </div>

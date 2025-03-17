@@ -119,7 +119,7 @@ function PostDetail() {
             dangerouslySetInnerHTML={{
               __html: post.content.replace(
                 /src="\/media\//g,
-                `src="${baseURL}media/`
+                `src="${baseURL}/media/`
               ),
             }}
           />
