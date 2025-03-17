@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import Comment from "../../components/Comment";
 import {
+  commentAPI,
   privateCommunityAPI,
   publicCommunityAPI,
 } from "../../api/communityApi";
@@ -32,7 +33,7 @@ function PostDetail() {
     const comment = event.target;
     console.log(comment["comment-input"].value);
 
-    privateCommunityAPI
+    commentAPI
       .post(`${postID}/comment/`, {
         content: comment["comment-input"].value,
       })
