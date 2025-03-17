@@ -1,12 +1,12 @@
 // utils/apiUtils.js
-import { publicCommunityAPI } from "../api/communityApi";
+import { privateCommunityAPI } from "../api/communityApi";
 
 export const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append("image", file);
 
   try {
-    const response = await publicCommunityAPI.post("upload-image/", formData);
+    const response = await privateCommunityAPI.post("upload-image/", formData);
     if (response.status === 201) {
       return response.data.file_path; // 업로드된 이미지 URL 반환
     } else {
