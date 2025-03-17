@@ -2,9 +2,13 @@ import Button from "../../components/Button";
 import Input from "../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { publicAccountAPI } from "../../api/accountApi";
+import { useSetRecoilState } from "recoil";
+import { isAuthenticated, authUser } from "../../recoil/authAtom";
 
 function Signin() {
   const navigate = useNavigate();
+  const setIsAuth = useSetRecoilState(isAuthenticated);
+  const setAuthUser = useSetRecoilState(authUser);
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -20,6 +24,11 @@ function Signin() {
       .then((response) => {
         console.log(response);
         console.log("로그인 성공");
+        setIsAuth(true);
+        setAuthUser({
+          nickname: response.data.nickname,
+          profileImg: response.data.profile_img,
+        });
         navigate("/");
       })
       .catch((error) => {
