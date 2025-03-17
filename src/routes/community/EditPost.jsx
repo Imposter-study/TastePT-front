@@ -7,7 +7,7 @@ import {
   privateCommunityAPI,
   publicCommunityAPI,
 } from "../../api/communityApi";
-import { changeBase64toImgFile } from "../../utils/imageUtils";
+import { changeBase64toImgFile, urlToImageFile } from "../../utils/imageUtils";
 import { getQuillModules, getQuillFormats } from "../../utils/quillUtils";
 
 function EditPost() {
@@ -48,18 +48,29 @@ function EditPost() {
 
   const onSubmit = async () => {
     // console.log(post.content);
-    const updatedHtml = await changeBase64toImgFile(post.title, post.content);
-    console.log(updatedHtml);
+    const { modifiedHtml, thumbnailUrl } = await changeBase64toImgFile(
+      post.title,
+      post.content
+    );
+    // console.log(modifiedHtml);
+    console.log(typeof thumbnailUrl);
+    // console.log(thumbnailUrl);
+    const thumbnailType = "image/" + thumbnailUrl.split(".").pop();
+    // console.log(thumbnailType);
 
-    privateCommunityAPI
-      .put(`${postID}/`, {
-        title: post.title,
-        content: updatedHtml,
-      })
-      .then((response) => {
-        console.log(response);
-        navigate(`/community/${postID}`);
-      });
+    // thumbnailUrl에서 파일 이름 추출
+    const fileName = thumbnailUrl.split("/").pop();
+    const thumbnailFile = await urlToImageFile(thumbnailUrl, fileName);
+
+    const formData = new FormData();
+    formData.append("title", post.title);
+    formData.append("content", modifiedHtml);
+    formData.append("thumbnail", thumbnailFile);
+
+    privateCommunityAPI.put(`${postID}/`, formData).then((response) => {
+      console.log(response);
+      navigate(`/community/${postID}`);
+    });
   };
 
   useEffect(() => {
@@ -83,7 +94,7 @@ function EditPost() {
             <ReactQuill
               value={post.content.replace(
                 /src="\/media\//g,
-                `src="${baseURL}media/`
+                `src="${baseURL}/media/`
               )}
               onChange={changeContent}
               modules={modules}
