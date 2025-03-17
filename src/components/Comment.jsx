@@ -2,6 +2,7 @@ import { useState } from "react";
 import defaultProfile from "/image.png";
 import Button from "./Button";
 import { commentAPI } from "../api/communityApi";
+import { Link } from "react-router-dom";
 
 function Comment({ comment: initialComment, onDeleteSuccess }) {
   const [isEdit, setEdit] = useState(false);
@@ -70,7 +71,9 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
       </div>
       <div className="flex flex-col w-full px-3">
         <p className="font-bold">
-          {comment.author.nickname}{" "}
+          <Link to={`/${comment.author.nickname}`}>
+            {comment.author.nickname}{" "}
+          </Link>
           <span className="text-xs text-gray-400 font-light">
             {comment.created_at.slice(0, 10)}
           </span>

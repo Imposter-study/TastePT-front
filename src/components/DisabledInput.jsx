@@ -1,4 +1,4 @@
-function Input({ inputLabel, isrequired, inputType, value, onChange }) {
+function DisabledInput({ inputLabel, inputValue }) {
   // 특수문자 및 공백 제거 후 id 생성
   const inputID =
     inputLabel.replace(/[^a-zA-Z0-9]/g, "").toLowerCase() + "-input";
@@ -9,15 +9,12 @@ function Input({ inputLabel, isrequired, inputType, value, onChange }) {
       <label className="">{inputLabel}</label>
       <input
         id={inputID}
-        className="border rounded-md p-1 pl-3 my-2 border-gray-400"
-        placeholder={inputLabel}
-        required={isrequired}
-        type={inputType}
-        value={value}
-        onChange={onChange}
+        className="p-1 pl-3 my-2 text-gray-400"
+        value={inputValue}
+        disabled={true}
       />
     </div>
   );
 }
 
-export default Input;
+export default DisabledInput;

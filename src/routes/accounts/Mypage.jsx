@@ -3,6 +3,7 @@ import Button from "../../components/Button";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import defaultProfile from "/image.png";
+import { Link } from "react-router-dom";
 
 function Mypage() {
   const [profileImgUrl, setProfileImgUrl] = useState(defaultProfile);
@@ -81,11 +82,13 @@ function Mypage() {
         <div className="flex justify-end mr-4">
           <div className="flex">
             <div className="p-1">
-              <Button
-                buttonName="패스워드 수정"
-                bgColor="red"
-                borderColor="red"
-              />
+              <Link to="/password">
+                <Button
+                  buttonName="패스워드 수정"
+                  bgColor="red"
+                  borderColor="red"
+                />
+              </Link>
             </div>
             <div className="p-1">
               <Button
