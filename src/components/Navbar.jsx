@@ -49,7 +49,7 @@ function Navbar() {
                 />
               </div>
               <div className="px-1">
-                <Link to="/mypage">
+                <Link to={`/${user.nickname}`}>
                   <img
                     src={
                       user.profileImg
