@@ -1,12 +1,13 @@
 function CheckBox({
   boxTitle,
   componentList,
-  defaultChecked,
+  defaultChecked=false,
   disabled,
   selectedData,
+  defaultList = [],
 }) {
   const handleChange = (component, isChecked) => {
-    selectedData((prev) =>
+    selectedData((prev = []) =>
       isChecked
         ? [...prev, component]
         : prev.filter((item) => item !== component)
@@ -22,7 +23,7 @@ function CheckBox({
             <input
               type="checkbox"
               className="hidden peer"
-              defaultChecked={defaultChecked}
+              defaultChecked={defaultChecked ? true : defaultList.includes(component)}
               disabled={disabled}
               onChange={(e) => handleChange(component, e.target.checked)}
             />
