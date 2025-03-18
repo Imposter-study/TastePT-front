@@ -1,17 +1,31 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Button from "../../components/Button";
 import defaultImage from "/no-image.png";
 import { publicCommunityAPI } from "../../api/communityApi";
+import PageNation from "../../components/PageNation";
 
 function PostList() {
   const [loading, setLoading] = useState(true);
   const [postList, setPostList] = useState([]);
+  const [totalPostCount, setTotalPostCount] = useState(0);
+
+  // 쿼리스트링
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get("page")) || 1; // 현재 페이지
+  const pageSize = Number(searchParams.get("page_size")) || 10; // 한 페이지에 보여줄 게시글 수
+
+  const handlePageChange = (page) => {
+    setSearchParams({ page: page.toString() });
+  };
 
   const getPostList = async () => {
-    const response = await publicCommunityAPI.get(``);
-    console.log(response.data);
-    setPostList(response.data);
+    const response = await publicCommunityAPI.get(
+      `?page=${currentPage}&page_size=${pageSize}`
+    );
+    // console.log(response.data);
+    setPostList(response.data.results);
+    setTotalPostCount(response.data.count);
     setLoading(false);
   };
 
@@ -27,7 +41,7 @@ function PostList() {
 
   useEffect(() => {
     getPostList();
-  }, []);
+  }, [currentPage, pageSize]);
 
   return (
     <div className="flex flex-col justity-center items-center pt-20">
@@ -66,6 +80,11 @@ function PostList() {
               </Link>
             ))}
           </div>
+          <PageNation
+            totalPostCount={totalPostCount}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
         </div>
       )}
     </div>
