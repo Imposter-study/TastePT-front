@@ -67,7 +67,15 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
   return (
     <div className="flex items-center border rounded-md mb-3 min-w-[300px]">
       <div>
-        <img src={defaultProfile} alt="profile-img" className="size-10 m-2" />
+        <img
+          src={
+            comment.author.profile_picture
+              ? comment.author.profile_picture
+              : defaultProfile
+          }
+          alt="profile-img"
+          className="size-10 m-2 rounded-full object-cover"
+        />
       </div>
       <div className="flex flex-col w-full px-3">
         <p className="font-bold">
