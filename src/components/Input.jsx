@@ -1,4 +1,4 @@
-function Input({ inputLabel, isrequired, inputType, value, onChange }) {
+function Input({ inputLabel, isrequired, inputType, value, onChange, defaultValue }) {
   // 특수문자 및 공백 제거 후 id 생성
   const inputID =
     inputLabel.replace(/[^a-zA-Z0-9]/g, "").toLowerCase() + "-input";
@@ -15,6 +15,7 @@ function Input({ inputLabel, isrequired, inputType, value, onChange }) {
         type={inputType}
         value={value}
         onChange={onChange}
+        defaultValue={defaultValue}
       />
     </div>
   );

@@ -75,10 +75,8 @@ function Signup() {
     // 성별
     console.log(signUpForm["gender-input"].value);
     const gender = signUpForm["gender-input"].value;
-    if (gender === "남자") {
-      formData.append("gender", "M");
-    } else if (gender === "여자") {
-      formData.append("gender", "F");
+    if (gender) {
+      formData.append("gender", gender);
     }
 
     // 알러지
@@ -196,7 +194,7 @@ function Signup() {
                 {/* 오른쪽 컨테이너 */}
                 <div className="flex-1 p-5 min-w-[300px] w-full">
                   {/* 성별 */}
-                  <Dropdown dropdownLabel="Gender" options={["남자", "여자"]} />
+                  <Dropdown dropdownLabel="Gender" options={["M", "F"]} />
 
                   {/* 다이어트 여부 */}
                   <Dropdown dropdownLabel="Diet" options={["True", "False"]} />

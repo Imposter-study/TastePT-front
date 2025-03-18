@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import DisabledInput from "../../components/DisabledInput";
 import defaultProfile from "/image.png";
 import Button from "../../components/Button";
 import { publicAccountAPI } from "../../api/accountApi";
 import { useParams } from "react-router-dom";
 import CheckBox from "../../components/CheckBox";
+import { authUser } from "../../recoil/authAtom";
 
 function Profile() {
+  const baseURL = import.meta.env.VITE_BASE_URL;
+
   const { nickname } = useParams();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
+  const authProfile = useRecoilValue(authUser);
 
   const getProfile = () => {
     publicAccountAPI.get(`${nickname}/`).then((response) => {
@@ -31,7 +37,11 @@ function Profile() {
         <div className="w-fit border-gray-300 m-5">
           <div className="flex flex-col items-center max-w-[150px] pb-2 ">
             <img
-              src={defaultProfile}
+              src={
+                user.profile_picture
+                  ? baseURL + user.profile_picture
+                  : defaultProfile
+              }
               alt="프로필 이미지"
               className="size-25 mb-3 rounded-full object-cover"
             />
@@ -61,7 +71,7 @@ function Profile() {
                 defaultChecked={true}
               />
 
-              {/* 알러지 */} 
+              {/* 알러지 */}
               <CheckBox
                 boxTitle="Allergy"
                 componentList={user.allergies}
@@ -70,19 +80,32 @@ function Profile() {
               />
             </div>
           </div>
-          <div className="flex justify-end">
-            <div className="pl-5">
-              <Button buttonName="신고하기" bgColor="red" borderColor="red" />
+          {authProfile.nickname === user.nickname ? (
+            <div className="flex justify-end">
+              <Link to={`/mypage`}>
+                <Button
+                  buttonName="프로필 수정하기"
+                  bgColor="white"
+                  textColor="gray"
+                  borderColor="gray"
+                />
+              </Link>
             </div>
-            <div className="pl-5">
-              <Button
-                buttonName="차단하기"
-                bgColor="yellow"
-                borderColor="yellow"
-                textColor="black"
-              />
+          ) : (
+            <div className="flex justify-end">
+              <div className="pl-5">
+                <Button buttonName="신고하기" bgColor="red" borderColor="red" />
+              </div>
+              <div className="pl-5">
+                <Button
+                  buttonName="차단하기"
+                  bgColor="yellow"
+                  borderColor="yellow"
+                  textColor="black"
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>
