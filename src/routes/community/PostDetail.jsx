@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import Comment from "../../components/Comment";
 import {
   privateCommunityAPI,
   publicCommunityAPI,
 } from "../../api/communityApi";
+import { useRecoilValue } from "recoil";
+import { authUser } from "../../recoil/authAtom";
+import defaultProfile from "/image.png";
 
 function PostDetail() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -14,6 +17,7 @@ function PostDetail() {
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState({});
   const [comments, setComments] = useState([]);
+  const auth = useRecoilValue(authUser);
 
   const navigate = useNavigate();
 
@@ -94,25 +98,45 @@ function PostDetail() {
           <div className="py-5">
             <h1 className="text-3xl font-bold">{post.title}</h1>
           </div>
-          {/* {post.content} */}
-          <div className="flex justify-end">
-            <div className="pl-1">
-              <Button
-                buttonName="수정하기"
-                bgColor="gray"
-                textColor="black"
-                onClick={goEdit}
-              />
+          <div className="flex justify-between items-center gap-2 border-b-2 border-gray-300 pb-5 text-gray-400">
+            <div className="flex items-center gap-2">
+              <Link to={`/${post.author.nickname}`}>
+                <div className="flex items-center gap-2">
+                  <img
+                    src={
+                      post.author.profile_picture
+                        ? post.author.profile_picture
+                        : defaultProfile
+                    }
+                    alt="profile"
+                    className="size-7 rounded-full"
+                  />
+                  <span>{post.author.nickname}</span>
+                </div>
+              </Link>
+              | <span>{post.created_at.slice(0, 10)}</span>
             </div>
+            {auth.nickname !== post.author.nickname ? null : (
+              <div className="flex justify-end">
+                <div className="pl-1">
+                  <Button
+                    buttonName="수정하기"
+                    bgColor="gray"
+                    textColor="black"
+                    onClick={goEdit}
+                  />
+                </div>
 
-            <div className="pl-1">
-              <Button
-                buttonName="삭제하기"
-                bgColor="gray"
-                textColor="black"
-                onClick={handleDelete}
-              />
-            </div>
+                <div className="pl-1">
+                  <Button
+                    buttonName="삭제하기"
+                    bgColor="gray"
+                    textColor="black"
+                    onClick={handleDelete}
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <div
             className="py-5"
@@ -125,7 +149,7 @@ function PostDetail() {
           />
 
           {/* 댓글 */}
-          <div className="border-t min-w-[200px]">
+          <div className="border-t-2 border-gray-300 min-w-[200px]">
             <div className="py-5 m-1">
               <form id="comment-form" className="flex" onSubmit={submitComment}>
                 <input
