@@ -59,7 +59,7 @@ function PostList() {
       {loading ? (
         "Loading..."
       ) : (
-        <div className="w-5/6 px-10">
+        <div className="w-5/6 px-10 ">
           {/* <h1>PostList</h1> */}
           <div className="flex justify-between items-center gap-2 py-5">
             <div className="flex-1">
@@ -78,13 +78,8 @@ function PostList() {
                 />
               </form>
             </div>
-            <div>
-              <Link to="/community/new">
-                <Button buttonName="✏️" bgColor="white" borderColor="gray" textSize="lg" />
-              </Link>
-            </div>
           </div>
-          <div className="">
+          <div className="border-b-2 border-gray-400">
             {postList.map((post) => (
               <Link to={`/community/${post.id}`} key={post.id}>
                 <div className="flex my-5 min-w-[700px]">
@@ -114,6 +109,18 @@ function PostList() {
           />
         </div>
       )}
+      {/* 고정된 게시글 작성 버튼 */}
+      <div className="fixed bottom-10 right-40 shadow-lg">
+        <Link to="/community/new">
+          <Button
+            buttonName="✏️ 게시글 작성"
+            textColor="black"  
+            bgColor="white"
+            borderColor="gray"
+            textSize="md"
+          />
+        </Link>
+      </div>
     </div>
   );
 }
