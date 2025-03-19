@@ -2,13 +2,15 @@ import Button from "../../components/Button";
 import Input from "../../components/Input";
 import { privateAccountAPI } from "../../api/accountApi";
 import { useNavigate } from "react-router-dom";
-import { authUser } from "../../recoil/authAtom";
-import { useRecoilValue } from "recoil";
+import { authUser, isAuthenticated } from "../../recoil/authAtom";
+import { useSetRecoilState } from "recoil";
 
 function Changepassword() {
   const navigate = useNavigate();
 
-  const user = useRecoilValue(authUser);
+  const setIsAuth = useSetRecoilState(isAuthenticated);
+  const setUser = useSetRecoilState(authUser);
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -30,8 +32,12 @@ function Changepassword() {
       .put("password/", data)
       .then((response) => {
         console.log(response);
-        alert("비밀번호가 변경되었습니다.");
-        navigate(`/${user.nickname}`);
+        setIsAuth(false);
+        setUser({});
+        alert(
+          "비밀번호가 변경되었습니다. \n 변경된 비밀번호로 로그인 해주세요."
+        );
+        navigate(`/signin`);
       })
       .catch((error) => {
         // console.log(error.response.data);
@@ -45,6 +51,7 @@ function Changepassword() {
         alert(errorMessage);
       });
   };
+
   return (
     <div className="flex justify-center items-center min-h-screen pt-20">
       <div className="border-2 rounded-md border-gray-200 min-w-[300px] p-5">
