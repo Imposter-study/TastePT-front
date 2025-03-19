@@ -1,11 +1,6 @@
 import axios from "axios";
 import baseAPI from "./axiosInstance";
-import Cookies from "js-cookie"; // CSRF 토큰 가져오기 위해 필요
-
-const getCsrfToken = () => {
-  const csrfToken = Cookies.get("csrftoken");
-  return csrfToken;
-};
+import { getCsrfToken } from "../utils/csrfUtils";
 
 const publicAccountAPI = axios.create({
   baseURL: `${baseAPI.defaults.baseURL}accounts/`,
