@@ -11,13 +11,6 @@ function Changepassword() {
   const setIsAuth = useSetRecoilState(isAuthenticated);
   const setUser = useSetRecoilState(authUser);
 
-  const handleLogout = () => {
-    privateAccountAPI.post("signout/").then((response) => {
-      console.log(response);
-      setIsAuth(false);
-      setUser({});
-    });
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -39,7 +32,8 @@ function Changepassword() {
       .put("password/", data)
       .then((response) => {
         console.log(response);
-        handleLogout();
+        setIsAuth(false);
+        setUser({});
         alert(
           "비밀번호가 변경되었습니다. \n 변경된 비밀번호로 로그인 해주세요."
         );
