@@ -5,6 +5,7 @@ import Input from "../../components/Input";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { publicAccountAPI } from "../../api/accountApi";
+import { errMessage } from "../../utils/errMessage";
 
 function Signup() {
   const navigate = useNavigate();
@@ -116,12 +117,9 @@ function Signup() {
         navigate("/");
       })
       .catch((error) => {
-        console.log();
         console.log(error);
-        const errorData = error.response.data;
-        console.log(errorData);
-        const firstKey = Object.keys(errorData)[0]; // errorData(json)의 첫 번째 key값
-        alert(error.response.data[firstKey]);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
       });
   };
 

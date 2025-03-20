@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { privateCommunityAPI } from "../../api/communityApi";
 import { changeBase64toImgFile, urlToImageFile } from "../../utils/imageUtils";
 import { getQuillModules, getQuillFormats } from "../../utils/quillUtils";
+import { errMessage } from "../../utils/errMessage";
 
 // 이미지 업로드를 위한 컴포넌트
 const CreatePost = () => {
@@ -60,8 +61,9 @@ const CreatePost = () => {
         navigate(`/community/${postID}`);
       })
       .catch((error) => {
-        console.error("게시글 저장 실패", error);
-        alert("게시글 등록에 실패하였습니다.");
+        console.log(error);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
       });
   };
 

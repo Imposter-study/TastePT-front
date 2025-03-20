@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authUser } from "../recoil/authAtom";
 import ProtectedButton from "./ProtectedButton";
-
+import { errMessage } from "../utils/errMessage";
 function Comment({ comment: initialComment, onDeleteSuccess }) {
   const baseURL = import.meta.env.VITE_BASE_URL;
   const { postID } = useParams();
@@ -55,7 +55,8 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
         })
         .catch((error) => {
           console.log(error);
-          console.log("댓글 수정 실패");
+          const errorMessage = errMessage(error);
+          alert(errorMessage);
         });
     }
   };
@@ -74,6 +75,8 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
         })
         .catch((error) => {
           console.log(error);
+          const errorMessage = errMessage(error);
+          alert(errorMessage);
         });
     }
   };
@@ -99,12 +102,8 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
       })
       .catch((error) => {
         console.log(error);
-        const errKeys = Object.keys(error.response.data);
-        let errMsg = "";
-        errKeys.forEach((key) => {
-          errMsg += error.response.data[key];
-        });
-        alert(errMsg);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
       });
   };
 

@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { publicAccountAPI } from "../../api/accountApi";
 import { useSetRecoilState } from "recoil";
 import { isAuthenticated, authUser } from "../../recoil/authAtom";
+import { errMessage } from "../../utils/errMessage";
 
 function Signin() {
   const navigate = useNavigate();
@@ -35,7 +36,8 @@ function Signin() {
       })
       .catch((error) => {
         console.log(error);
-        console.log("로그인 실패");
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
       });
   };
 

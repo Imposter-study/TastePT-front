@@ -10,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { authUser } from "../../recoil/authAtom";
 import ProtectedButton from "../../components/ProtectedButton";
 import defaultProfile from "../../assets/image.png";
+import { errMessage } from "../../utils/errMessage";
 
 function PostDetail() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -51,8 +52,8 @@ function PostDetail() {
       })
       .catch((error) => {
         console.log(error);
-        console.log("댓글 작성 실패");
-        alert("댓글 작성에 실패하였습니다.");
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
       });
   };
 
@@ -80,7 +81,8 @@ function PostDetail() {
         })
         .catch((error) => {
           console.log(error);
-          console.log("게시글 삭제 실패");
+          const errorMessage = errMessage(error);
+          alert(errorMessage);
         });
     }
   };

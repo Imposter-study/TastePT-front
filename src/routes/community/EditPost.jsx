@@ -9,6 +9,7 @@ import {
 } from "../../api/communityApi";
 import { changeBase64toImgFile, urlToImageFile } from "../../utils/imageUtils";
 import { getQuillModules, getQuillFormats } from "../../utils/quillUtils";
+import { errMessage } from "../../utils/errMessage";
 
 function EditPost() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -67,10 +68,17 @@ function EditPost() {
     formData.append("content", modifiedHtml);
     formData.append("thumbnail", thumbnailFile);
 
-    privateCommunityAPI.put(`${postID}/`, formData).then((response) => {
-      console.log(response);
-      navigate(`/community/${postID}`);
-    });
+    privateCommunityAPI
+      .put(`${postID}/`, formData)
+      .then((response) => {
+        console.log(response);
+        navigate(`/community/${postID}`);
+      })
+      .catch((error) => {
+        console.log(error);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
+      });
   };
 
   useEffect(() => {
