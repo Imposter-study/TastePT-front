@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Button from "../../components/Button";
-import defaultImage from "/no-image.png";
+import defaultImage from "../../assets/no-image.png";
 import { publicCommunityAPI } from "../../api/communityApi";
 import PageNation from "../../components/PageNation";
 

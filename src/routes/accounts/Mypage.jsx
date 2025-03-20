@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Button from "../../components/Button";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
-import defaultProfile from "/image.png";
+import defaultProfile from "../../assets/image.png";
 import { Link } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authUser } from "../../recoil/authAtom";

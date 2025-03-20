@@ -3,7 +3,7 @@ import Button from "./Button";
 import { useRecoilState } from "recoil";
 import { isAuthenticated, authUser } from "../recoil/authAtom";
 import { privateAccountAPI } from "../api/accountApi";
-import defaultProfile from "/image.png";
+import defaultProfile from "../assets/image.png";
 import tastePTLogo from "../assets/tastePT-logo.png";
 
 function Navbar() {
