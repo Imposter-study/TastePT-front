@@ -13,6 +13,8 @@ import PostList from "./routes/community/PostList";
 import Profile from "./routes/accounts/Profile";
 import ChatBot from "./routes/ChatBot";
 import Footer from "./components/Footer";
+import TermsOfService from "./routes/policies/TermsOfService";
+import PrivacyPolicy from "./routes/policies/PrivacyPolicy";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route path="community/:postID/" element={<PostDetail />} />
           <Route path="community/:postID/edit/" element={<EditPost />} />
           <Route path="chatbot/" element={<ChatBot />} />
+          <Route path="terms-of-service/" element={<TermsOfService />} />
+          <Route path="privacy-policy/" element={<PrivacyPolicy />} />
         </Routes>
       </div>
       <Footer />
