@@ -1,5 +1,5 @@
 import { useState } from "react";
-import defaultProfile from "/image.png";
+import defaultProfile from "../assets/image.png";
 import Button from "./Button";
 import { commentAPI, privateCommunityAPI } from "../api/communityApi";
 import { Link, useParams } from "react-router-dom";

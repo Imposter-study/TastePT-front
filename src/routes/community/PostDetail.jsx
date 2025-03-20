@@ -8,8 +8,8 @@ import {
 } from "../../api/communityApi";
 import { useRecoilValue } from "recoil";
 import { authUser } from "../../recoil/authAtom";
-import defaultProfile from "/image.png";
 import ProtectedButton from "../../components/ProtectedButton";
+import defaultProfile from "../../assets/image.png";
 
 function PostDetail() {
   const baseURL = import.meta.env.VITE_BASE_URL;

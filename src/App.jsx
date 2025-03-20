@@ -13,10 +13,14 @@ import PostList from "./routes/community/PostList";
 import Profile from "./routes/accounts/Profile";
 import ChatBot from "./routes/ChatBot";
 import ProtectedRouter from "./routes/ProtectedRouter";
+import Footer from "./components/Footer";
+import TermsOfService from "./routes/policies/TermsOfService";
+import PrivacyPolicy from "./routes/policies/PrivacyPolicy";
 
 function App() {
   return (
-    <div className="container mx-auto">
+    <>
+      <div className="container mx-auto">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />                                    {/* 메인페이지 */}
@@ -33,8 +37,12 @@ function App() {
         </Route>
         <Route path="community/" element={<PostList />} />                       {/* 게시글 목록 페이지 */}
         <Route path="community/:postID/" element={<PostDetail />} />             {/* 게시글 상세 페이지 */}
+        <Route path="terms-of-service/" element={<TermsOfService />} />         {/* 이용약관 페이지 */}
+        <Route path="privacy-policy/" element={<PrivacyPolicy />} />           {/* 개인정보처리방침 페이지 */}
       </Routes>
     </div>
+      <Footer />
+    </>
   );
 }
 
