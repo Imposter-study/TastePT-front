@@ -9,6 +9,7 @@ import { authUser } from "../../recoil/authAtom";
 import { privateAccountAPI, publicAccountAPI } from "../../api/accountApi";
 import CheckBox from "../../components/CheckBox";
 import DisabledInput from "../../components/DisabledInput";
+import { errMessage } from "../../utils/errMessage";
 
 function Mypage() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -106,7 +107,7 @@ function Mypage() {
     }
 
     // 프로필 이미지
-    if (profileImgUrl) {
+    if (profileImgUrl != defaultProfile) {
       console.log(document.getElementById("profileImg").files[0]);
       const profileImgFile = document.getElementById("profileImg").files[0];
       // console.log(profileImgUrl);
@@ -114,14 +115,22 @@ function Mypage() {
       formData.append("profile_picture", profileImgFile);
     }
 
-    privateAccountAPI.put(``, formData).then((response) => {
-      console.log(response);
-      setAuthUser({
-        nickname: response.data.nickname,
-        profileImg: response.data.profile_picture,
+    privateAccountAPI
+      .put(``, formData)
+      .then((response) => {
+        console.log(response);
+        setAuthUser({
+          nickname: response.data.nickname,
+          profileImg: response.data.profile_picture,
+        });
+        alert("프로필 수정이 완료되었습니다.");
+        navigate(`/${response.data.nickname}`);
+      })
+      .catch((error) => {
+        console.log(error);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
       });
-      alert("프로필 수정이 완료되었습니다.");
-    });
   };
 
   useEffect(() => {
@@ -197,7 +206,11 @@ function Mypage() {
               />
 
               {/* 다이어트 여부 */}
-              <Dropdown dropdownLabel="Diet" options={["true", "false"]} defaultValue={userProfile.diet ? "true" : "false"} />
+              <Dropdown
+                dropdownLabel="Diet"
+                options={["true", "false"]}
+                defaultValue={userProfile.diet ? "true" : "false"}
+              />
             </div>
             {/* 오른쪽 컨테이너 */}
             <div className="flex-1 p-5 min-w-[300px] w-full">

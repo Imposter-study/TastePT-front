@@ -4,6 +4,7 @@ import { privateAccountAPI } from "../../api/accountApi";
 import { useNavigate } from "react-router-dom";
 import { authUser, isAuthenticated } from "../../recoil/authAtom";
 import { useSetRecoilState } from "recoil";
+import { errMessage } from "../../utils/errMessage";
 
 function Changepassword() {
   const navigate = useNavigate();
@@ -40,14 +41,8 @@ function Changepassword() {
         navigate(`/signin`);
       })
       .catch((error) => {
-        // console.log(error.response.data);
-        const errorMessages = error.response.data; // 에러 메세지 json
-        const errorKeys = Object.keys(errorMessages); // 에러 메세지 키
-        // console.log(errorKeys);
-        let errorMessage = "";
-        errorKeys.forEach((key) => {
-          errorMessage += errorMessages[key] + "\n";
-        });
+        console.log(error);
+        const errorMessage = errMessage(error);
         alert(errorMessage);
       });
   };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Button from "../components/Button";
 import { chatbotAPI } from "../api/chatbotApi";
+import { errMessage } from "../utils/errMessage";
 
 function ChatBot() {
   const messageListRef = useRef(null);
@@ -24,6 +25,8 @@ function ChatBot() {
       })
       .catch((error) => {
         console.log(error);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
       })
       .finally(() => {
         setIsAbled(false);
