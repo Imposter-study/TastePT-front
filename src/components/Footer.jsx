@@ -18,7 +18,12 @@ function Footer() {
             개인정보처리방침
           </span>
           <span> | </span>
-          <span className="font-bold hover:underline cursor-pointer">
+          <span
+            className="font-bold hover:underline cursor-pointer"
+            onClick={() => {
+              navigate("/terms-of-service");
+            }}
+          >
             이용약관
           </span>
         </p>
