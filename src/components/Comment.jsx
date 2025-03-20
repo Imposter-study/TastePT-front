@@ -5,6 +5,7 @@ import { commentAPI, privateCommunityAPI } from "../api/communityApi";
 import { Link, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authUser } from "../recoil/authAtom";
+import ProtectedButton from "./ProtectedButton";
 
 function Comment({ comment: initialComment, onDeleteSuccess }) {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -191,16 +192,22 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
 
         {makeReply ? (
           <div className="py-5 m-1">
-            <form id="reply-form" className="flex pl-10" onSubmit={onMakeReply}>
-              <input
-                id="reply-input"
-                className="border-2 border-gray-300 rounded-md w-full pl-3"
-                placeholder="comment"
-              />
-              <div className="px-1">
-                <Button buttonName="submit" />
-              </div>
-            </form>
+            <ProtectedButton to={`/community/${postID}/`}>
+              <form
+                id="reply-form"
+                className="flex pl-10"
+                onSubmit={onMakeReply}
+              >
+                <input
+                  id="reply-input"
+                  className="border-2 border-gray-300 rounded-md w-full pl-3"
+                  placeholder="comment"
+                />
+                <div className="px-1">
+                  <Button buttonName="submit" />
+                </div>
+              </form>
+            </ProtectedButton>
             {comment.reply_comments.length === 0 ? (
               <div className="flex flex-col w-full pl-10 p-3 text-gray-400">
                 첫 번째 답글을 작성해보세요!

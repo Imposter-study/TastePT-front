@@ -4,6 +4,7 @@ import Button from "../../components/Button";
 import defaultImage from "../../assets/no-image.png";
 import { publicCommunityAPI } from "../../api/communityApi";
 import PageNation from "../../components/PageNation";
+import ProtectedButton from "../../components/ProtectedButton";
 
 function PostList() {
   // 쿼리스트링
@@ -111,15 +112,15 @@ function PostList() {
       )}
       {/* 고정된 게시글 작성 버튼 */}
       <div className="fixed bottom-10 right-40 shadow-lg">
-        <Link to="/community/new">
+        <ProtectedButton to="/community/new">
           <Button
             buttonName="✏️ 게시글 작성"
-            textColor="black"  
+            textColor="black"
             bgColor="white"
             borderColor="gray"
             textSize="md"
           />
-        </Link>
+        </ProtectedButton>
       </div>
     </div>
   );

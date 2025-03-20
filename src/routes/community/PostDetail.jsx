@@ -8,6 +8,7 @@ import {
 } from "../../api/communityApi";
 import { useRecoilValue } from "recoil";
 import { authUser } from "../../recoil/authAtom";
+import ProtectedButton from "../../components/ProtectedButton";
 import defaultProfile from "../../assets/image.png";
 
 function PostDetail() {
@@ -151,16 +152,22 @@ function PostDetail() {
           {/* 댓글 */}
           <div className="border-t-2 border-gray-300 min-w-[200px]">
             <div className="py-5 m-1">
-              <form id="comment-form" className="flex" onSubmit={submitComment}>
-                <input
-                  id="comment-input"
-                  className="border-2 border-gray-300 rounded-md w-full pl-3"
-                  placeholder="comment"
-                />
-                <div className="px-1">
-                  <Button buttonName="submit" />
-                </div>
-              </form>
+              <ProtectedButton to={`/community/${postID}/`}>
+                <form
+                  id="comment-form"
+                  className="flex"
+                  onSubmit={submitComment}
+                >
+                  <input
+                    id="comment-input"
+                    className="border-2 border-gray-300 rounded-md w-full pl-3"
+                    placeholder="comment"
+                  />
+                  <div className="px-1">
+                    <Button buttonName="submit" />
+                  </div>
+                </form>
+              </ProtectedButton>
             </div>
             {comments.map((comment) => (
               <Comment

@@ -12,6 +12,7 @@ import PostDetail from "./routes/community/PostDetail";
 import PostList from "./routes/community/PostList";
 import Profile from "./routes/accounts/Profile";
 import ChatBot from "./routes/ChatBot";
+import ProtectedRouter from "./routes/ProtectedRouter";
 import Footer from "./components/Footer";
 import TermsOfService from "./routes/policies/TermsOfService";
 import PrivacyPolicy from "./routes/policies/PrivacyPolicy";
@@ -20,23 +21,26 @@ function App() {
   return (
     <>
       <div className="container mx-auto">
-        <Navbar />
-        <Routes>
-          <Route path="" element={<Home />} />
-          <Route path="signup/" element={<Signup />} />
-          <Route path="signin/" element={<Signin />} />
-          <Route path="mypage/" element={<Mypage />} />
-          <Route path=":nickname/" element={<Profile />} />
-          <Route path="password/" element={<Changepassword />} />
-          <Route path="community/" element={<PostList />} />
-          <Route path="community/new/" element={<CreatePost />} />
-          <Route path="community/:postID/" element={<PostDetail />} />
-          <Route path="community/:postID/edit/" element={<EditPost />} />
-          <Route path="chatbot/" element={<ChatBot />} />
-          <Route path="terms-of-service/" element={<TermsOfService />} />
-          <Route path="privacy-policy/" element={<PrivacyPolicy />} />
-        </Routes>
-      </div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />                                    {/* 메인페이지 */}
+        <Route path="signup/" element={<Signup />} />                            {/* 회원가입 페이지 */}
+        <Route path="signin/" element={<Signin />} />                            {/* 로그인 페이지 */} 
+        {/* 로그인 후 접근 가능한 페이지 */}
+        <Route element={<ProtectedRouter />}>
+          <Route path="community/new/" element={<CreatePost />} />               {/* 게시글 작성 페이지 */}
+          <Route path="community/:postID/edit/" element={<EditPost />} />        {/* 게시글 수정 페이지 */}
+          <Route path="mypage/" element={<Mypage />} />                          {/* 마이페이지(프로필 수정) */}
+          <Route path="password/" element={<Changepassword />} />                {/* 비밀번호 변경 페이지 */}
+          <Route path="chatbot/" element={<ChatBot />} />                        {/* 챗봇 페이지 */}
+          <Route path=":nickname/" element={<Profile />} />                      {/* 프로필 페이지 */}
+        </Route>
+        <Route path="community/" element={<PostList />} />                       {/* 게시글 목록 페이지 */}
+        <Route path="community/:postID/" element={<PostDetail />} />             {/* 게시글 상세 페이지 */}
+        <Route path="terms-of-service/" element={<TermsOfService />} />         {/* 이용약관 페이지 */}
+        <Route path="privacy-policy/" element={<PrivacyPolicy />} />           {/* 개인정보처리방침 페이지 */}
+      </Routes>
+    </div>
       <Footer />
     </>
   );

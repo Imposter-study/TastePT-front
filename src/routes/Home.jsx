@@ -1,5 +1,5 @@
 import Button from "../components/Button";
-import { Link } from "react-router-dom";
+import ProtectedButton from "../components/ProtectedButton";
 
 function Home() {
   return (
@@ -9,9 +9,9 @@ function Home() {
           <strong className="text-black text-6xl m-3 mt-5 pt-10 ">맛P.T</strong>
           <p className="text-gray-500 text-2xl m-2">subtitle</p>
           <div className="m-2">
-            <Link to="/chatbot">
+            <ProtectedButton to="/chatbot">
               <Button buttonName="start" />
-            </Link>
+            </ProtectedButton>
           </div>
         </div>
       </div>
