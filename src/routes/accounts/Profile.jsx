@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import DisabledInput from "../../components/DisabledInput";
-import defaultProfile from "/image.png";
+import defaultProfile from "../../assets/image.png";
 import Button from "../../components/Button";
 import { publicAccountAPI } from "../../api/accountApi";
 import { useParams } from "react-router-dom";

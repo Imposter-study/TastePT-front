@@ -8,8 +8,8 @@ import {
 } from "../../api/communityApi";
 import { useRecoilValue } from "recoil";
 import { authUser } from "../../recoil/authAtom";
-import defaultProfile from "/image.png";
 import ProtectedButton from "../../components/ProtectedButton";
+import defaultProfile from "../../assets/image.png";
 import { errMessage } from "../../utils/errMessage";
 
 function PostDetail() {
