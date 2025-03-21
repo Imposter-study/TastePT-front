@@ -32,6 +32,7 @@ function Mypage() {
   const [selectedPreferredCuisineList, setSelectedPreferredCuisineList] =
     useState([]);
 
+  // 알러지 목록 가져오기
   const getAllergyList = () => {
     publicAccountAPI.get("allergies_list/").then((response) => {
       // console.log(response);
@@ -41,6 +42,7 @@ function Mypage() {
     });
   };
 
+  // 선호 요리 목록 가져오기
   const getPreferredCuisineList = () => {
     publicAccountAPI.get("preferredCuisine_list/").then((response) => {
       // console.log(response);
@@ -52,6 +54,7 @@ function Mypage() {
     });
   };
 
+  // 유저 프로필 가져오기
   const getUserProfile = async () => {
     try {
       if (user.nickname) {
@@ -72,6 +75,7 @@ function Mypage() {
     }
   };
 
+  // 프로필 이미지 변경
   const onFileChange = (event) => {
     event.preventDefault();
     // console.log(event.target.files[0]);
@@ -82,6 +86,16 @@ function Mypage() {
     setIsProfileChanged(true);
   };
 
+  // 기본 이미지로 변경
+  const handleSetDefaultProfile = () => {
+    const defaultImgConfirm = window.confirm("기본 이미지로 변경하시겠습니까?");
+    if (defaultImgConfirm) {
+      setProfileImgUrl(defaultProfile);
+      setIsProfileChanged(true);
+    }
+  };
+
+  // 프로필 수정
   const onSubmit = (event) => {
     event.preventDefault();
     // console.log(document.getElementById("nickname-input").value);
@@ -113,11 +127,15 @@ function Mypage() {
     // 프로필 이미지
     // console.log("프로필 이미지 변경 여부 : ", isProfileChanged);
     if (isProfileChanged) {
-      console.log(document.getElementById("profileImg").files[0]);
-      const profileImgFile = document.getElementById("profileImg").files[0];
-      // console.log(profileImgUrl);
-      // console.log(profileImgUrl.split("/").pop());
-      formData.append("profile_picture", profileImgFile);
+      if (profileImgUrl === defaultProfile) {
+        formData.append("profile_picture", "");
+      } else {
+        console.log(document.getElementById("profileImg").files[0]);
+        const profileImgFile = document.getElementById("profileImg").files[0];
+        // console.log(profileImgUrl);
+        // console.log(profileImgUrl.split("/").pop());
+        formData.append("profile_picture", profileImgFile);
+      }
     }
 
     privateAccountAPI
@@ -157,7 +175,7 @@ function Mypage() {
   return (
     <div className="flex justify-center items-center min-h-screen pt-20">
       <div className="w-fit border-gray-300 m-5">
-        <div className="flex justify-center max-w-[300px]">
+        <div className="flex flex-col justify-center items-center max-w-[300px]">
           <div className="flex flex-col items-center max-w-[150px]">
             <img
               src={profileImgUrl}
@@ -176,6 +194,12 @@ function Mypage() {
               className="hidden"
               onChange={onFileChange}
             />
+          </div>
+          <div
+            className="text-sm text-gray-400 hover:underline cursor-pointer"
+            onClick={handleSetDefaultProfile}
+          >
+            기본 이미지로 변경하기
           </div>
         </div>
         <div className="flex">
