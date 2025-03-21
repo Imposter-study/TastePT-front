@@ -21,7 +21,8 @@ function Mypage() {
   // useState : 상태 관리
   const [profileImgUrl, setProfileImgUrl] = useState(defaultProfile);
   const [loading, setLoading] = useState(true);
-  const [userProfile, setUserProfile] = useState({});
+  const [userProfile, setUserProfile] = useState({}); 
+  let isProfileChanged = false
 
   // useState : 상태 관리
   const [allergyList, setAllergyList] = useState([]);
@@ -76,6 +77,7 @@ function Mypage() {
     const profileImgUrl = URL.createObjectURL(profileImgFile);
     // console.log(profileImgUrl);
     setProfileImgUrl(profileImgUrl);
+    isProfileChanged = true
   };
 
   const onSubmit = (event) => {
@@ -107,7 +109,7 @@ function Mypage() {
     }
 
     // 프로필 이미지
-    if (profileImgUrl != defaultProfile) {
+    if (isProfileChanged) {
       console.log(document.getElementById("profileImg").files[0]);
       const profileImgFile = document.getElementById("profileImg").files[0];
       // console.log(profileImgUrl);
