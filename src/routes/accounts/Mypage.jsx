@@ -3,7 +3,7 @@ import Button from "../../components/Button";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import defaultProfile from "../../assets/image.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authUser } from "../../recoil/authAtom";
 import { privateAccountAPI, publicAccountAPI } from "../../api/accountApi";
@@ -13,6 +13,7 @@ import { errMessage } from "../../utils/errMessage";
 
 function Mypage() {
   const baseURL = import.meta.env.VITE_BASE_URL;
+  const navigate = useNavigate();
 
   // atom : 전역 상태 관리
   const user = useRecoilValue(authUser);
@@ -21,8 +22,8 @@ function Mypage() {
   // useState : 상태 관리
   const [profileImgUrl, setProfileImgUrl] = useState(defaultProfile);
   const [loading, setLoading] = useState(true);
-  const [userProfile, setUserProfile] = useState({}); 
-  let isProfileChanged = false
+  const [userProfile, setUserProfile] = useState({});
+  const [isProfileChanged, setIsProfileChanged] = useState(false);
 
   // useState : 상태 관리
   const [allergyList, setAllergyList] = useState([]);
@@ -66,6 +67,7 @@ function Mypage() {
       }
     } catch (error) {
       console.error("프로필 정보를 가져오는데 실패했습니다:", error);
+      alert("프로필 정보를 가져오는데 실패했습니다.");
       setLoading(true);
     }
   };
@@ -77,7 +79,7 @@ function Mypage() {
     const profileImgUrl = URL.createObjectURL(profileImgFile);
     // console.log(profileImgUrl);
     setProfileImgUrl(profileImgUrl);
-    isProfileChanged = true
+    setIsProfileChanged(true);
   };
 
   const onSubmit = (event) => {
@@ -109,6 +111,7 @@ function Mypage() {
     }
 
     // 프로필 이미지
+    // console.log("프로필 이미지 변경 여부 : ", isProfileChanged);
     if (isProfileChanged) {
       console.log(document.getElementById("profileImg").files[0]);
       const profileImgFile = document.getElementById("profileImg").files[0];
