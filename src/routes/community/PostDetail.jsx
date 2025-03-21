@@ -96,7 +96,7 @@ function PostDetail() {
       {loading ? (
         "Loading ..."
       ) : (
-        <div className="w-4/5">
+        <div className="w-4/5 h-screen">
           {/* 게시글 */}
           <div className="py-5">
             <h1 className="text-3xl font-bold">{post.title}</h1>
