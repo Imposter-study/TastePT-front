@@ -56,11 +56,11 @@ function PostList() {
   }, [currentPage, pageSize, searchWord]);
 
   return (
-    <div className="flex flex-col justity-center items-center pt-20">
+    <div className="flex flex-col justify-center items-center pt-20">
       {loading ? (
         "Loading..."
       ) : (
-        <div className="w-5/6 px-10 ">
+        <div className="w-5/6 px-10 h-screen">
           {/* <h1>PostList</h1> */}
           <div className="flex justify-between items-center gap-2 py-5">
             <div className="flex-1">
