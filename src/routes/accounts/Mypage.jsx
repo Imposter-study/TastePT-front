@@ -3,7 +3,7 @@ import Button from "../../components/Button";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
 import defaultProfile from "../../assets/image.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authUser } from "../../recoil/authAtom";
 import { privateAccountAPI, publicAccountAPI } from "../../api/accountApi";
@@ -13,6 +13,7 @@ import { errMessage } from "../../utils/errMessage";
 
 function Mypage() {
   const baseURL = import.meta.env.VITE_BASE_URL;
+  const navigate = useNavigate();
 
   // atom : 전역 상태 관리
   const user = useRecoilValue(authUser);
@@ -22,6 +23,7 @@ function Mypage() {
   const [profileImgUrl, setProfileImgUrl] = useState(defaultProfile);
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState({});
+  const [isProfileChanged, setIsProfileChanged] = useState(false);
 
   // useState : 상태 관리
   const [allergyList, setAllergyList] = useState([]);
@@ -30,6 +32,7 @@ function Mypage() {
   const [selectedPreferredCuisineList, setSelectedPreferredCuisineList] =
     useState([]);
 
+  // 알러지 목록 가져오기
   const getAllergyList = () => {
     publicAccountAPI.get("allergies_list/").then((response) => {
       // console.log(response);
@@ -39,6 +42,7 @@ function Mypage() {
     });
   };
 
+  // 선호 요리 목록 가져오기
   const getPreferredCuisineList = () => {
     publicAccountAPI.get("preferredCuisine_list/").then((response) => {
       // console.log(response);
@@ -50,6 +54,7 @@ function Mypage() {
     });
   };
 
+  // 유저 프로필 가져오기
   const getUserProfile = async () => {
     try {
       if (user.nickname) {
@@ -65,10 +70,12 @@ function Mypage() {
       }
     } catch (error) {
       console.error("프로필 정보를 가져오는데 실패했습니다:", error);
+      alert("프로필 정보를 가져오는데 실패했습니다.");
       setLoading(true);
     }
   };
 
+  // 프로필 이미지 변경
   const onFileChange = (event) => {
     event.preventDefault();
     // console.log(event.target.files[0]);
@@ -76,8 +83,19 @@ function Mypage() {
     const profileImgUrl = URL.createObjectURL(profileImgFile);
     // console.log(profileImgUrl);
     setProfileImgUrl(profileImgUrl);
+    setIsProfileChanged(true);
   };
 
+  // 기본 이미지로 변경
+  const handleSetDefaultProfile = () => {
+    const defaultImgConfirm = window.confirm("기본 이미지로 변경하시겠습니까?");
+    if (defaultImgConfirm) {
+      setProfileImgUrl(defaultProfile);
+      setIsProfileChanged(true);
+    }
+  };
+
+  // 프로필 수정
   const onSubmit = (event) => {
     event.preventDefault();
     // console.log(document.getElementById("nickname-input").value);
@@ -107,12 +125,17 @@ function Mypage() {
     }
 
     // 프로필 이미지
-    if (profileImgUrl != defaultProfile) {
-      console.log(document.getElementById("profileImg").files[0]);
-      const profileImgFile = document.getElementById("profileImg").files[0];
-      // console.log(profileImgUrl);
-      // console.log(profileImgUrl.split("/").pop());
-      formData.append("profile_picture", profileImgFile);
+    // console.log("프로필 이미지 변경 여부 : ", isProfileChanged);
+    if (isProfileChanged) {
+      if (profileImgUrl === defaultProfile) {
+        formData.append("profile_picture", "");
+      } else {
+        console.log(document.getElementById("profileImg").files[0]);
+        const profileImgFile = document.getElementById("profileImg").files[0];
+        // console.log(profileImgUrl);
+        // console.log(profileImgUrl.split("/").pop());
+        formData.append("profile_picture", profileImgFile);
+      }
     }
 
     privateAccountAPI
@@ -152,7 +175,7 @@ function Mypage() {
   return (
     <div className="flex justify-center items-center min-h-screen pt-20">
       <div className="w-fit border-gray-300 m-5">
-        <div className="flex justify-center max-w-[300px]">
+        <div className="flex flex-col justify-center items-center max-w-[300px]">
           <div className="flex flex-col items-center max-w-[150px]">
             <img
               src={profileImgUrl}
@@ -171,6 +194,12 @@ function Mypage() {
               className="hidden"
               onChange={onFileChange}
             />
+          </div>
+          <div
+            className="text-sm text-gray-400 hover:underline cursor-pointer"
+            onClick={handleSetDefaultProfile}
+          >
+            기본 이미지로 변경하기
           </div>
         </div>
         <div className="flex">
