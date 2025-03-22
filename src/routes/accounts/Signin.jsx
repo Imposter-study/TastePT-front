@@ -1,7 +1,7 @@
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import { useNavigate, useLocation } from "react-router-dom";
-import { publicAccountAPI } from "../../api/accountApi";
+import { publicAccountAPI, privateAccountAPI } from "../../api/accountApi";
 import { useSetRecoilState } from "recoil";
 import { isAuthenticated, authUser } from "../../recoil/authAtom";
 import { errMessage } from "../../utils/errMessage";
@@ -41,6 +41,16 @@ function Signin() {
       });
   };
 
+  const handleKakaoLogin = () => {
+    privateAccountAPI
+      .get(`social/signin/kakao/`)
+      .then((response) => {
+        console.log(response);
+        window.location.href = response.data.auth_url;
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen pt-20">
       <div className="border-2 rounded-md w-1/3 border-gray-300 m-5 px-5 pb-3 min-w-[300px]">
@@ -61,6 +71,7 @@ function Signin() {
           Forgot password?
         </a>
       </div>
+      <div onClick={handleKakaoLogin}>카카오 로그인</div>
     </div>
   );
 }
