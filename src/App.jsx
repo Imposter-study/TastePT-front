@@ -16,6 +16,7 @@ import ProtectedRouter from "./routes/ProtectedRouter";
 import Footer from "./components/Footer";
 import TermsOfService from "./routes/policies/TermsOfService";
 import PrivacyPolicy from "./routes/policies/PrivacyPolicy";
+import CheckPassword from "./routes/accounts/CheckPassword";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="password/" element={<Changepassword />} />                {/* 비밀번호 변경 페이지 */}
           <Route path="chatbot/" element={<ChatBot />} />                        {/* 챗봇 페이지 */}
           <Route path=":nickname/" element={<Profile />} />                      {/* 프로필 페이지 */}
+          <Route path="checkpassword/" element={<CheckPassword />} />            {/* 비밀번호 확인 페이지 */}
         </Route>
         <Route path="community/" element={<PostList />} />                       {/* 게시글 목록 페이지 */}
         <Route path="community/:postID/" element={<PostDetail />} />             {/* 게시글 상세 페이지 */}

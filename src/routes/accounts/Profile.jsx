@@ -81,7 +81,7 @@ function Profile() {
             </div>
           </div>
           {authProfile.nickname === user.nickname ? (
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-3">
               <Link to={`/mypage`}>
                 <Button
                   buttonName="프로필 수정하기"
@@ -89,6 +89,9 @@ function Profile() {
                   textColor="gray"
                   borderColor="gray"
                 />
+              </Link>
+              <Link to={`/checkpassword`}>
+                <Button buttonName="탈퇴하기"/>
               </Link>
             </div>
           ) : (
