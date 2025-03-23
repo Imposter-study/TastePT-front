@@ -5,6 +5,7 @@ import { publicAccountAPI, privateAccountAPI } from "../../api/accountApi";
 import { useSetRecoilState } from "recoil";
 import { isAuthenticated, authUser } from "../../recoil/authAtom";
 import { errMessage } from "../../utils/errMessage";
+import kakaoLogin from "../../assets/Kakao 로그인 배너.png";
 
 function Signin() {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ function Signin() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen pt-20">
+    <div className="flex flex-col justify-center items-center min-h-screen pt-20">
       <div className="border-2 rounded-md w-1/3 border-gray-300 m-5 px-5 pb-3 min-w-[300px]">
         <form onSubmit={onSubmit}>
           <div className="py-4">
@@ -71,7 +72,9 @@ function Signin() {
           Forgot password?
         </a>
       </div>
-      <div onClick={handleKakaoLogin}>카카오 로그인</div>
+      <div onClick={handleKakaoLogin}>
+        <img src={kakaoLogin} alt="kakao-login" />
+      </div>
     </div>
   );
 }
