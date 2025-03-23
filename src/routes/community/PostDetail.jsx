@@ -11,6 +11,7 @@ import { authUser } from "../../recoil/authAtom";
 import ProtectedButton from "../../components/ProtectedButton";
 import defaultProfile from "../../assets/image.png";
 import { errMessage } from "../../utils/errMessage";
+import SafeHtml from "../../components/SafeHTML";
 
 function PostDetail() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -141,7 +142,8 @@ function PostDetail() {
               </div>
             )}
           </div>
-          <div
+          <SafeHtml content={post.content} />
+          {/* <div
             className="py-5"
             dangerouslySetInnerHTML={{
               __html: post.content.replace(
@@ -149,7 +151,7 @@ function PostDetail() {
                 `src="${baseURL}/media/`
               ),
             }}
-          />
+          /> */}
 
           {/* 댓글 */}
           <div className="border-t-2 border-gray-300 min-w-[200px]">
