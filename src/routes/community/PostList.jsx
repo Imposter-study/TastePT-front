@@ -60,7 +60,7 @@ function PostList() {
       {loading ? (
         "Loading..."
       ) : (
-        <div className="w-5/6 px-10 h-screen">
+        <div className="w-5/6 px-10 min-h-screen">
           {/* <h1>PostList</h1> */}
           <div className="flex justify-between items-center gap-2 py-5">
             <div className="flex-1">

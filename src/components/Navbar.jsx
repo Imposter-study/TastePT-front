@@ -17,12 +17,15 @@ function Navbar() {
     const signOutConfirm = window.confirm("로그아웃 하시겠습니까?");
 
     if (signOutConfirm) {
-      await privateAccountAPI.post("signout/").then((response) => {
-        console.log(response);
-        setIsAuth(false);
-        setUser({});
-        window.location.href = "/";
-      });
+      await privateAccountAPI
+        .post("signout/")
+        .then((response) => {
+          console.log(response);
+          setIsAuth(false);
+          setUser({});
+          window.location.href = "/";
+        })
+        .catch((error) => console.log(error));
     }
   };
 
@@ -31,7 +34,11 @@ function Navbar() {
       <div className="container mx-auto flex justify-between items-center border-b-2 border-gray-300 p-5">
         <Link to="/">
           <div className="m-1 font-bold text-lg cursor-pointer">
-            <img src={tastePTLogo} alt="tastePT-logo" className="size-10 object-cover" />
+            <img
+              src={tastePTLogo}
+              alt="tastePT-logo"
+              className="size-10 object-cover"
+            />
           </div>
         </Link>
         <div className="flex items-center">
