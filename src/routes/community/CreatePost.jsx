@@ -44,13 +44,14 @@ const CreatePost = () => {
     // console.log(typeof thumbnailUrl);
     // console.log(thumbnailUrl);
 
-    const fileName = thumbnailUrl.split("/").pop();
-    const thumbnailFile = await urlToImageFile(thumbnailUrl, fileName);
-
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", modifiedHtml);
-    formData.append("thumbnail", thumbnailFile);
+    const fileName = thumbnailUrl?.split("/").pop();
+    if (fileName) {
+      const thumbnailFile = await urlToImageFile(thumbnailUrl, fileName);
+      formData.append("thumbnail", thumbnailFile);
+    }
 
     privateCommunityAPI
       .post(``, formData)
