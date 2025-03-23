@@ -56,7 +56,7 @@ function Navbar() {
                   <img
                     src={
                       user.profileImg
-                        ? baseURL + user.profileImg
+                        ? user.profileImg
                         : defaultProfile
                     }
                     alt="profile"

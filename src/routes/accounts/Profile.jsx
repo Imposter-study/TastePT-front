@@ -10,8 +10,6 @@ import CheckBox from "../../components/CheckBox";
 import { authUser } from "../../recoil/authAtom";
 
 function Profile() {
-  const baseURL = import.meta.env.VITE_BASE_URL;
-
   const { nickname } = useParams();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
@@ -39,7 +37,7 @@ function Profile() {
             <img
               src={
                 user.profile_picture
-                  ? baseURL + user.profile_picture
+                  ? user.profile_picture
                   : defaultProfile
               }
               alt="프로필 이미지"

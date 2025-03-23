@@ -115,7 +115,7 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
             <img
               src={
                 comment.author.profile_picture
-                  ? baseURL + comment.author.profile_picture
+                  ? comment.author.profile_picture
                   : defaultProfile
               }
               alt="profile-img"

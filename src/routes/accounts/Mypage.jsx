@@ -62,7 +62,7 @@ function Mypage() {
         console.log(response);
         setUserProfile(response.data);
         if (response.data.profile_picture) {
-          setProfileImgUrl(baseURL + response.data.profile_picture);
+          setProfileImgUrl(response.data.profile_picture);
         }
         setSelectedAllergyList(response.data.allergies);
         setSelectedPreferredCuisineList(response.data.preferred_cuisine);
