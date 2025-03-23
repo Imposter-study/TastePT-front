@@ -56,17 +56,19 @@ function EditPost() {
     // console.log(modifiedHtml);
     console.log(typeof thumbnailUrl);
     // console.log(thumbnailUrl);
-    const thumbnailType = "image/" + thumbnailUrl.split(".").pop();
-    // console.log(thumbnailType);
-
     // thumbnailUrl에서 파일 이름 추출
-    const fileName = thumbnailUrl.split("/").pop();
-    const thumbnailFile = await urlToImageFile(thumbnailUrl, fileName);
+    const thumbnailType = "image/" + thumbnailUrl?.split(".").pop();
+    // console.log(thumbnailType);
 
     const formData = new FormData();
     formData.append("title", post.title);
     formData.append("content", modifiedHtml);
-    formData.append("thumbnail", thumbnailFile);
+
+    const fileName = thumbnailUrl?.split("/").pop();
+    if (fileName) {
+      const thumbnailFile = await urlToImageFile(thumbnailUrl, fileName);
+      formData.append("thumbnail", thumbnailFile);
+    }
 
     privateCommunityAPI
       .put(`${postID}/`, formData)
