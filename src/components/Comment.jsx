@@ -7,6 +7,7 @@ import { useRecoilValue } from "recoil";
 import { authUser } from "../recoil/authAtom";
 import ProtectedButton from "./ProtectedButton";
 import { errMessage } from "../utils/errMessage";
+import { getImageUrl } from "../utils/imageUtils";
 function Comment({ comment: initialComment, onDeleteSuccess }) {
   const baseURL = import.meta.env.VITE_BASE_URL;
   const { postID } = useParams();
@@ -113,11 +114,10 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
         <div className="flex">
           <div>
             <img
-              src={
-                comment.author.profile_picture
-                  ? baseURL + comment.author.profile_picture
-                  : defaultProfile
-              }
+              src={getImageUrl(
+                comment.author.profile_picture,
+                defaultProfile
+              )}
               alt="profile-img"
               className="size-10 m-2 rounded-full object-cover"
             />

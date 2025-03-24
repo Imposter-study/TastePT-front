@@ -5,6 +5,7 @@ import { isAuthenticated, authUser } from "../recoil/authAtom";
 import { privateAccountAPI } from "../api/accountApi";
 import defaultProfile from "../assets/image.png";
 import tastePTLogo from "../assets/tastePT-logo.png";
+import { getImageUrl } from "../utils/imageUtils";
 
 function Navbar() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -61,11 +62,7 @@ function Navbar() {
               <div className="px-1">
                 <Link to={`/${user.nickname}`}>
                   <img
-                    src={
-                      user.profileImg
-                        ? baseURL + user.profileImg
-                        : defaultProfile
-                    }
+                    src={getImageUrl(user.profileImg, defaultProfile)}
                     alt="profile"
                     className="w-10 h-10 rounded-full object-cover"
                   />

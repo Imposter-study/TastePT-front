@@ -10,6 +10,7 @@ import { privateAccountAPI, publicAccountAPI } from "../../api/accountApi";
 import CheckBox from "../../components/CheckBox";
 import DisabledInput from "../../components/DisabledInput";
 import { errMessage } from "../../utils/errMessage";
+import { getImageUrl } from "../../utils/imageUtils";
 
 function Mypage() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -62,7 +63,7 @@ function Mypage() {
         console.log(response);
         setUserProfile(response.data);
         if (response.data.profile_picture) {
-          setProfileImgUrl(baseURL + response.data.profile_picture);
+          setProfileImgUrl(getImageUrl(response.data.profile_picture));
         }
         setSelectedAllergyList(response.data.allergies);
         setSelectedPreferredCuisineList(response.data.preferred_cuisine);
