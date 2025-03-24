@@ -11,6 +11,7 @@ import { changeBase64toImgFile, urlToImageFile } from "../../utils/imageUtils";
 import { getQuillModules, getQuillFormats } from "../../utils/quillUtils";
 import { errMessage } from "../../utils/errMessage";
 import Loading from "../../components/Loading";
+import NotFound from "../../components/NotFound";
 
 function EditPost() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -20,12 +21,20 @@ function EditPost() {
   const { postID } = useParams();
   const [loading, setLoading] = useState(true);
   const [post, setPost] = useState({});
-
+  const [notFound, setNotFound] = useState(false);
   const modules = getQuillModules();
   const formats = getQuillFormats();
 
   const getPost = async () => {
-    const response = await publicCommunityAPI.get(`${postID}`);
+    const response = await publicCommunityAPI
+      .get(`${postID}`)
+      .catch((error) => {
+        if (error.response.status === 404) {
+          setNotFound(true);
+        } else {
+          setNotFound(false);
+        }
+      });
     // console.log(response.data);
     setPost(response.data);
     setLoading(false);
@@ -55,7 +64,7 @@ function EditPost() {
       post.content
     );
     // console.log(modifiedHtml);
-    // console.log(typeof thumbnailUrl); 
+    // console.log(typeof thumbnailUrl);
     // console.log(thumbnailUrl);
     // const thumbnailType = "image/" + thumbnailUrl.split(".").pop();
     // console.log(thumbnailType);
@@ -88,8 +97,12 @@ function EditPost() {
     getPost();
   }, [postID]);
 
+  if (notFound) {
+    return <NotFound />;
+  }
+
   return (
-    <div className="flex flex-col pt-20 h-screen">
+    <div className="flex flex-col justify-center items-center pt-20 h-screen">
       {loading ? (
         <Loading text="Loading" />
       ) : (

@@ -13,6 +13,7 @@ import defaultProfile from "../../assets/image.png";
 import { errMessage } from "../../utils/errMessage";
 import SafeHtml from "../../components/SafeHTML";
 import Loading from "../../components/Loading";
+import NotFound from "../../components/NotFound";
 
 function PostDetail() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -22,12 +23,21 @@ function PostDetail() {
   const [post, setPost] = useState({});
   const [comments, setComments] = useState([]);
   const auth = useRecoilValue(authUser);
+  const [notFound, setNotFound] = useState(false);
 
   const navigate = useNavigate();
 
   // 게시글 조회
   const getPost = async () => {
-    const response = await publicCommunityAPI.get(`${postID}/`);
+    const response = await publicCommunityAPI
+      .get(`${postID}/`)
+      .catch((error) => {
+        if (error.response.status === 404) {
+          setNotFound(true);
+        } else {
+          setNotFound(false);
+        }
+      });
     // console.log(response.data);
     setPost(response.data); // 게시글
     setComments(response.data.comments); // 댓글
@@ -94,6 +104,10 @@ function PostDetail() {
   useEffect(() => {
     getPost();
   }, [postID]);
+
+  if (notFound) {
+    return <NotFound />;
+  }
 
   return (
     <div className="flex flex-col justify-center items-center pt-20 min-h-screen">

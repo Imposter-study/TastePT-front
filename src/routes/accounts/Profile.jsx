@@ -10,6 +10,7 @@ import CheckBox from "../../components/CheckBox";
 import { authUser } from "../../recoil/authAtom";
 import { commingSoon } from "../../utils/commingSoon";
 import Loading from "../../components/Loading";
+import NotFound from "../../components/NotFound";
 
 function Profile() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -18,18 +19,33 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
   const authProfile = useRecoilValue(authUser);
+  const [notFound, setNotFound] = useState(false);
 
   const getProfile = () => {
-    publicAccountAPI.get(`${nickname}/`).then((response) => {
-      // console.log(response);
-      setUser(response.data);
-      setLoading(false);
-    });
+    publicAccountAPI
+      .get(`${nickname}/`)
+      .then((response) => {
+        setUser(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        // console.log(error);
+        // console.log(error.response.status);
+        if (error.response.status === 404) {
+          setNotFound(true);
+        } else {
+          setNotFound(false);
+        }
+      });
   };
 
   useEffect(() => {
     getProfile();
   }, [nickname]);
+
+  if (notFound) {
+    return <NotFound />;
+  }
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen pt-20">

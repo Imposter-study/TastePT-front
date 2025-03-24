@@ -17,6 +17,7 @@ import Footer from "./components/Footer";
 import TermsOfService from "./routes/policies/TermsOfService";
 import PrivacyPolicy from "./routes/policies/PrivacyPolicy";
 import CheckPassword from "./routes/accounts/CheckPassword";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="community/:postID/" element={<PostDetail />} />             {/* 게시글 상세 페이지 */}
         <Route path="terms-of-service/" element={<TermsOfService />} />         {/* 이용약관 페이지 */}
         <Route path="privacy-policy/" element={<PrivacyPolicy />} />           {/* 개인정보처리방침 페이지 */}
+        <Route path="*" element={<NotFound />} />                              {/* 404 페이지 */}
       </Routes>
     </div>
       <Footer />
