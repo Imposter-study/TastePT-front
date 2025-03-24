@@ -59,11 +59,10 @@ function EditPost() {
     // const thumbnailType = "image/" + thumbnailUrl.split(".").pop();
     // console.log(thumbnailType);
 
-    
     const formData = new FormData();
     formData.append("title", post.title);
     formData.append("content", modifiedHtml);
-    // thumbnailUrl에서 파일 이름 추출
+
     const fileName = thumbnailUrl?.split("/").pop();
     if (fileName) {
       const thumbnailFile = await urlToImageFile(thumbnailUrl, fileName);

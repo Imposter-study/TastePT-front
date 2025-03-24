@@ -16,7 +16,7 @@ const privateCommunityAPI = axios.create({
 
 const commentAPI = axios.create({
   ...baseAPI.defaults,
-  baseURL: `${baseAPI.defaults.baseURL}community/`,
+  baseURL: `${baseAPI.defaults.baseURL}community/comment/`,
   withCredentials: true, // 세션 인증 사용
 });
 
