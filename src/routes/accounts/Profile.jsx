@@ -8,6 +8,7 @@ import { publicAccountAPI } from "../../api/accountApi";
 import { useParams } from "react-router-dom";
 import CheckBox from "../../components/CheckBox";
 import { authUser } from "../../recoil/authAtom";
+import { getImageUrl } from "../../utils/imageUtils";
 
 function Profile() {
   const { nickname } = useParams();
@@ -35,11 +36,7 @@ function Profile() {
         <div className="w-fit border-gray-300 m-5">
           <div className="flex flex-col items-center max-w-[150px] pb-2 ">
             <img
-              src={
-                user.profile_picture
-                  ? user.profile_picture
-                  : defaultProfile
-              }
+              src={getImageUrl(user.profile_picture, defaultProfile)}
               alt="프로필 이미지"
               className="size-25 mb-3 rounded-full object-cover"
             />
