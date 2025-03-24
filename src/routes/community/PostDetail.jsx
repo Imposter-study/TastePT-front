@@ -31,6 +31,7 @@ function PostDetail() {
     // console.log(response.data);
     setPost(response.data); // 게시글
     setComments(response.data.comments); // 댓글
+    window.scrollTo(0, 0);
     setLoading(false);
   };
 
