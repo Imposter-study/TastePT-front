@@ -5,6 +5,7 @@ import { isAuthenticated, authUser } from "../recoil/authAtom";
 import { privateAccountAPI } from "../api/accountApi";
 import defaultProfile from "../assets/image.png";
 import tastePTLogo from "../assets/tastePT-logo.png";
+import { commingSoon } from "../utils/commingSoon";
 
 function Navbar() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -42,7 +43,13 @@ function Navbar() {
           </div>
         </Link>
         <div className="flex items-center">
-          <div className="px-5">
+          <div className="px-5 gap-5 flex">
+            <div className="text-sm cursor-pointer" onClick={commingSoon}>
+              Shop
+            </div>
+            <div className="text-sm cursor-pointer" onClick={commingSoon}>
+              Live Chatting
+            </div>
             <Link to="/community">
               <div className="text-sm cursor-pointer">Community</div>
             </Link>

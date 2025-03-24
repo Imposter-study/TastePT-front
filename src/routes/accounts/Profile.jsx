@@ -8,6 +8,7 @@ import { publicAccountAPI } from "../../api/accountApi";
 import { useParams } from "react-router-dom";
 import CheckBox from "../../components/CheckBox";
 import { authUser } from "../../recoil/authAtom";
+import { commingSoon } from "../../utils/commingSoon";
 
 function Profile() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -45,7 +46,12 @@ function Profile() {
               alt="프로필 이미지"
               className="size-25 mb-3 rounded-full object-cover"
             />
-            <Button buttonName="팔로우" bgColor="gray" textColor="black" />
+            <Button
+              buttonName="팔로우"
+              bgColor="gray"
+              textColor="black"
+              onClick={commingSoon}
+            />
           </div>
           <div className="flex">
             <div>
@@ -91,13 +97,18 @@ function Profile() {
                 />
               </Link>
               <Link to={`/checkpassword`}>
-                <Button buttonName="탈퇴하기"/>
+                <Button buttonName="탈퇴하기" />
               </Link>
             </div>
           ) : (
             <div className="flex justify-end">
               <div className="pl-5">
-                <Button buttonName="신고하기" bgColor="red" borderColor="red" />
+                <Button
+                  buttonName="신고하기"
+                  bgColor="red"
+                  borderColor="red"
+                  onClick={commingSoon}
+                />
               </div>
               <div className="pl-5">
                 <Button
@@ -105,6 +116,7 @@ function Profile() {
                   bgColor="yellow"
                   borderColor="yellow"
                   textColor="black"
+                  onClick={commingSoon}
                 />
               </div>
             </div>
