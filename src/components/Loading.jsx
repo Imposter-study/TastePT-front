@@ -1,5 +1,6 @@
 import tastePTLogo from "../assets/tastePT-logo.png";
 import styles from "./loading.module.css";
+
 function Loading({ text }) {
   return (
     <div className="text-gray-400 flex items-center gap-2">

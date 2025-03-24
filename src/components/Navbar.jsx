@@ -6,6 +6,7 @@ import { privateAccountAPI } from "../api/accountApi";
 import defaultProfile from "../assets/image.png";
 import tastePTLogo from "../assets/tastePT-logo.png";
 import { commingSoon } from "../utils/commingSoon";
+import { errMessage } from "../utils/errMessage";
 
 function Navbar() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -21,12 +22,17 @@ function Navbar() {
       await privateAccountAPI
         .post("signout/")
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           setIsAuth(false);
           setUser({});
+          alert(response.data.detail);
           window.location.href = "/";
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          // console.log(error);
+          const errorMessage = errMessage(error);
+          alert(errorMessage);
+        });
     }
   };
 

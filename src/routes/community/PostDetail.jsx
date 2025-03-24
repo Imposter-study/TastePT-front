@@ -36,22 +36,22 @@ function PostDetail() {
   const submitComment = (event) => {
     event.preventDefault();
     const comment = event.target;
-    console.log(comment["comment-input"].value);
+    // console.log(comment["comment-input"].value);
 
     privateCommunityAPI
       .post(`${postID}/comment/`, {
         content: comment["comment-input"].value,
       })
       .then((response) => {
-        console.log(response);
-        console.log("댓글 작성 성공");
+        // console.log(response);
+        // console.log("댓글 작성 성공");
         setComments((prev) => [...prev, response.data]); // 새 댓글 추가
         comment.reset();
         alert("댓글이 작성되었습니다.");
         getPost();
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       });
@@ -75,12 +75,13 @@ function PostDetail() {
       privateCommunityAPI
         .delete(`${postID}/`)
         .then((response) => {
-          console.log(response);
-          console.log("게시글 삭제 성공");
+          // console.log(response);
+          // console.log("게시글 삭제 성공");
+          alert("게시글이 삭제되었습니다.");
           navigate("/community");
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
           const errorMessage = errMessage(error);
           alert(errorMessage);
         });

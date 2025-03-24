@@ -25,7 +25,7 @@ function ChatBot() {
         ]);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       })

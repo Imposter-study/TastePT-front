@@ -44,7 +44,7 @@ function Signup() {
       // console.log(response);
       // console.log(response.data);
       const nickname = response.data.nickname;
-      console.log(nickname);
+      // console.log(nickname);
       setRandomNickname(nickname);
       // setLoading(false);
     });
@@ -74,15 +74,15 @@ function Signup() {
     }
 
     // 성별
-    console.log(signUpForm["gender-input"].value);
+    // console.log(signUpForm["gender-input"].value);
     const gender = signUpForm["gender-input"].value;
     if (gender) {
       formData.append("gender", gender);
     }
 
     // 알러지
-    console.log(selectedAllergyList);
-    console.log(typeof selectedAllergyList);
+    // console.log(selectedAllergyList);
+    // console.log(typeof selectedAllergyList);
     if (selectedAllergyList.length > 0) {
       // 각각의 알러지 항목을 별도로 추가
       selectedAllergyList.forEach((allergy) => {
@@ -91,7 +91,7 @@ function Signup() {
     }
 
     // 선호 요리
-    console.log(selectedPreferredCuisineList);
+    // console.log(selectedPreferredCuisineList);
     if (selectedPreferredCuisineList.length > 0) {
       // 각각의 선호 요리 항목을 별도로 추가
       selectedPreferredCuisineList.forEach((cuisine) => {
@@ -102,22 +102,22 @@ function Signup() {
     // 다이어트 여부
     const isDiet = signUpForm["diet-input"].value;
     if (isDiet === "유") {
-      console.log(isDiet);
+      // console.log(isDiet);
       formData.append("diet", true);
     } else if (isDiet === "무") {
-      console.log(isDiet);
+      // console.log(isDiet);
       formData.append("diet", false);
     }
 
     publicAccountAPI
       .post("", formData)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         alert("회원가입이 완료되었습니다.");
         navigate("/");
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       });

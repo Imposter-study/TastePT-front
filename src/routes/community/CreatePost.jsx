@@ -44,24 +44,27 @@ const CreatePost = () => {
     // console.log(typeof thumbnailUrl);
     // console.log(thumbnailUrl);
 
-    const fileName = thumbnailUrl.split("/").pop();
-    const thumbnailFile = await urlToImageFile(thumbnailUrl, fileName);
+    const fileName = thumbnailUrl?.split("/").pop();
 
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", modifiedHtml);
-    formData.append("thumbnail", thumbnailFile);
+    if (fileName) {
+      const thumbnailFile = await urlToImageFile(thumbnailUrl, fileName);
+      formData.append("thumbnail", thumbnailFile);
+    }
 
     privateCommunityAPI
       .post(``, formData)
       .then((response) => {
-        console.log("게시글 저장 성공");
-        console.log(response.data.id);
+        // console.log("게시글 저장 성공");
+        // console.log(response.data);
         const postID = response.data.id;
+        alert("게시글 작성이 완료되었습니다.");
         navigate(`/community/${postID}`);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       });

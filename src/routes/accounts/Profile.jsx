@@ -20,7 +20,7 @@ function Profile() {
 
   const getProfile = () => {
     publicAccountAPI.get(`${nickname}/`).then((response) => {
-      console.log(response);
+      // console.log(response);
       setUser(response.data);
       setLoading(false);
     });

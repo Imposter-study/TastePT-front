@@ -15,12 +15,12 @@ function CheckPassword() {
       privateAccountAPI
         .delete("", { data: { password: password } })
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           alert(response.data.message);
           window.location.href = "/";
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
           const errorMessage = errMessage(error);
           alert(errorMessage);
         });

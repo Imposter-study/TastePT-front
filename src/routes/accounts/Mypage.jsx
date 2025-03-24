@@ -59,7 +59,7 @@ function Mypage() {
     try {
       if (user.nickname) {
         const response = await privateAccountAPI.get(`${user.nickname}/`);
-        console.log(response);
+        // console.log(response);
         setUserProfile(response.data);
         if (response.data.profile_picture) {
           setProfileImgUrl(baseURL + response.data.profile_picture);
@@ -141,7 +141,7 @@ function Mypage() {
     privateAccountAPI
       .put(``, formData)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setAuthUser({
           nickname: response.data.nickname,
           profileImg: response.data.profile_picture,
@@ -150,7 +150,7 @@ function Mypage() {
         navigate(`/${response.data.nickname}`);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       });

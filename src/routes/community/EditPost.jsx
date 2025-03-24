@@ -25,9 +25,9 @@ function EditPost() {
 
   const getPost = async () => {
     const response = await publicCommunityAPI.get(`${postID}`);
-    console.log(response.data);
-    setPost((prev) => response.data);
-    setLoading((prev) => false);
+    // console.log(response.data);
+    setPost(response.data);
+    setLoading(false);
   };
 
   const changeTitle = (event) => {
@@ -54,28 +54,31 @@ function EditPost() {
       post.content
     );
     // console.log(modifiedHtml);
-    console.log(typeof thumbnailUrl);
+    // console.log(typeof thumbnailUrl); 
     // console.log(thumbnailUrl);
-    const thumbnailType = "image/" + thumbnailUrl.split(".").pop();
+    // const thumbnailType = "image/" + thumbnailUrl.split(".").pop();
     // console.log(thumbnailType);
 
-    // thumbnailUrl에서 파일 이름 추출
-    const fileName = thumbnailUrl.split("/").pop();
-    const thumbnailFile = await urlToImageFile(thumbnailUrl, fileName);
-
+    
     const formData = new FormData();
     formData.append("title", post.title);
     formData.append("content", modifiedHtml);
-    formData.append("thumbnail", thumbnailFile);
+    // thumbnailUrl에서 파일 이름 추출
+    const fileName = thumbnailUrl?.split("/").pop();
+    if (fileName) {
+      const thumbnailFile = await urlToImageFile(thumbnailUrl, fileName);
+      formData.append("thumbnail", thumbnailFile);
+    }
 
     privateCommunityAPI
       .put(`${postID}/`, formData)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
+        alert("게시글 수정이 완료되었습니다.");
         navigate(`/community/${postID}`);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       });

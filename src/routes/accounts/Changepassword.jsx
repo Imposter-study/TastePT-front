@@ -15,7 +15,7 @@ function Changepassword() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event.target);
+    // console.log(event.target);
     const passwordForm = event.target;
     const password = passwordForm["password-input"].value;
     const newPassword = passwordForm["newpassword-input"].value;
@@ -27,12 +27,12 @@ function Changepassword() {
       new_password_confirm: passwordConfirm,
     };
 
-    console.log(data);
+    // console.log(data);
 
     privateAccountAPI
       .put("password/", data)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setIsAuth(false);
         setUser({});
         alert(
@@ -41,7 +41,7 @@ function Changepassword() {
         navigate(`/signin`);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       });
