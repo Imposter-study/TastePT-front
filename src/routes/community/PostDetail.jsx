@@ -12,6 +12,7 @@ import ProtectedButton from "../../components/ProtectedButton";
 import defaultProfile from "../../assets/image.png";
 import { errMessage } from "../../utils/errMessage";
 import SafeHtml from "../../components/SafeHTML";
+import Loading from "../../components/Loading";
 
 function PostDetail() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -94,9 +95,9 @@ function PostDetail() {
   }, [postID]);
 
   return (
-    <div className="flex flex-col justify-center items-center pt-20">
+    <div className="flex flex-col justify-center items-center pt-20 min-h-screen">
       {loading ? (
-        "Loading ..."
+        <Loading text="Loading" />
       ) : (
         <div className="w-4/5 min-h-screen">
           {/* 게시글 */}

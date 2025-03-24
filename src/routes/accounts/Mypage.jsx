@@ -10,6 +10,7 @@ import { privateAccountAPI, publicAccountAPI } from "../../api/accountApi";
 import CheckBox from "../../components/CheckBox";
 import DisabledInput from "../../components/DisabledInput";
 import { errMessage } from "../../utils/errMessage";
+import Loading from "../../components/Loading";
 
 function Mypage() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -130,7 +131,7 @@ function Mypage() {
       if (profileImgUrl === defaultProfile) {
         formData.append("profile_picture", "");
       } else {
-        console.log(document.getElementById("profileImg").files[0]);
+        // console.log(document.getElementById("profileImg").files[0]);
         const profileImgFile = document.getElementById("profileImg").files[0];
         // console.log(profileImgUrl);
         // console.log(profileImgUrl.split("/").pop());
@@ -167,7 +168,7 @@ function Mypage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen pt-20">
-        Loading...
+        <Loading text="Loading" />
       </div>
     );
   }

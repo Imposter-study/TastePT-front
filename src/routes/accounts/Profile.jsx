@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import CheckBox from "../../components/CheckBox";
 import { authUser } from "../../recoil/authAtom";
 import { commingSoon } from "../../utils/commingSoon";
+import Loading from "../../components/Loading";
 
 function Profile() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -33,7 +34,7 @@ function Profile() {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen pt-20">
       {loading ? (
-        "loading"
+        <Loading text="Loading" />
       ) : (
         <div className="w-fit border-gray-300 m-5">
           <div className="flex flex-col items-center max-w-[150px] pb-2 ">

@@ -10,6 +10,7 @@ import {
 import { changeBase64toImgFile, urlToImageFile } from "../../utils/imageUtils";
 import { getQuillModules, getQuillFormats } from "../../utils/quillUtils";
 import { errMessage } from "../../utils/errMessage";
+import Loading from "../../components/Loading";
 
 function EditPost() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -90,7 +91,7 @@ function EditPost() {
   return (
     <div className="flex flex-col pt-20 h-screen">
       {loading ? (
-        "Loading..."
+        <Loading text="Loading" />
       ) : (
         <div className="flex flex-col h-screen">
           <input

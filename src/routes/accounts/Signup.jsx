@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { publicAccountAPI } from "../../api/accountApi";
 import { errMessage } from "../../utils/errMessage";
+import Loading from "../../components/Loading";
 
 function Signup() {
   const navigate = useNavigate();
@@ -132,7 +133,7 @@ function Signup() {
   return (
     <div className="flex justify-center items-center min-h-screen pt-20">
       {loading ? (
-        "Loading..."
+        <Loading text="Loading" />
       ) : (
         <div className="border-2 rounded-md w-fit border-gray-300 m-5">
           <form id="signUpForm" onSubmit={onSubmit}>
