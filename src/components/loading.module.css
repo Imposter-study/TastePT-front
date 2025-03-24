@@ -1,0 +1,30 @@
+@keyframes dots {
+  0%,
+  20% {
+    content: ".";
+  }
+  40% {
+    content: ". .";
+  }
+  60% {
+    content: ". . .";
+  }
+  80% {
+    content: ". . .";
+  }
+  100% {
+    content: "";
+  }
+}
+
+.dots::after {
+  content: "";
+  animation: dots 1.5s steps(1) infinite;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: gray;
+}
