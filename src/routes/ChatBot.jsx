@@ -3,6 +3,7 @@ import Button from "../components/Button";
 import { chatbotAPI } from "../api/chatbotApi";
 import { errMessage } from "../utils/errMessage";
 import Loading from "../components/Loading";
+import ReactMarkdown from "react-markdown";
 
 function ChatBot() {
   const messageListRef = useRef(null);
@@ -76,7 +77,7 @@ function ChatBot() {
               className="max-w-[50%] bg-white border-2 border-gray-300 rounded-md p-2 break-words"
               style={{ wordWrap: "break-word", overflowWrap: "break-word" }}
             >
-              {message.text}
+              <ReactMarkdown>{message.text}</ReactMarkdown>
             </div>
           </div>
         ))}
