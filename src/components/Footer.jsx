@@ -1,6 +1,7 @@
 import notionIcon from "../assets/notion-icon.webp";
 import githubIcon from "../assets/github-icon.png";
 import { useNavigate } from "react-router-dom";
+import { commingSoon } from "../utils/commingSoon";
 
 function Footer() {
   const navigate = useNavigate();
@@ -31,14 +32,20 @@ function Footer() {
         <p>Copyright ⓒ 2025. ImposterStudy All rights reserved.</p>
       </div>
       <div className="flex gap-3 p-5">
-        <a href="https://www.notion.so/P-T-1a87d4611a6f80938cc9e0d41d01ca40?pvs=4">
+        <a
+          // href="https://www.notion.so/P-T-1a87d4611a6f80938cc9e0d41d01ca40?pvs=4"
+          onClick={commingSoon}
+        >
           <img
             src={notionIcon}
             alt="notion-icon"
             className="size-6 object-cover"
           />
         </a>
-        <a href="https://github.com/Imposter-study/TastePT">
+        <a
+          // href="https://github.com/Imposter-study/TastePT"
+          onClick={commingSoon}
+        >
           <img
             src={githubIcon}
             alt="github-icon"
