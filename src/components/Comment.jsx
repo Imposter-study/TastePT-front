@@ -7,6 +7,8 @@ import { useRecoilValue } from "recoil";
 import { authUser } from "../recoil/authAtom";
 import ProtectedButton from "./ProtectedButton";
 import { errMessage } from "../utils/errMessage";
+import { getImageUrl } from "../utils/imageUtils";
+
 function Comment({ comment: initialComment, onDeleteSuccess }) {
   const baseURL = import.meta.env.VITE_BASE_URL;
   const { postID } = useParams();
@@ -74,7 +76,6 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
           alert("댓글이 삭제되었습니다.");
         })
         .catch((error) => {
-          console.log(error);
           const errorMessage = errMessage(error);
           alert(errorMessage);
         });
@@ -107,17 +108,23 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
       });
   };
 
+  // 대댓글 삭제
+  const onDeleteReply = (replyID) => {
+    setComment((prevComment) => ({
+      ...prevComment,
+      reply_comments: prevComment.reply_comments.filter(
+        (reply) => reply.id !== replyID
+      ),
+    }));
+  };
+
   return (
     <div className="flex items-center pb-2 mb-3 min-w-[300px]">
       <div>
         <div className="flex">
           <div>
             <img
-              src={
-                comment.author.profile_picture
-                  ? baseURL + comment.author.profile_picture
-                  : defaultProfile
-              }
+              src={getImageUrl(comment.author.profile_picture, defaultProfile)}
               alt="profile-img"
               className="size-10 m-2 rounded-full object-cover"
             />
@@ -215,7 +222,11 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
               <div className="flex flex-col w-full pl-10 p-3">
                 <div>
                   {comment.reply_comments.map((reply) => (
-                    <Comment key={reply.id} comment={reply} />
+                    <Comment
+                      key={reply.id}
+                      comment={reply}
+                      onDeleteSuccess={() => onDeleteReply(reply.id)}
+                    />
                   ))}
                 </div>
               </div>

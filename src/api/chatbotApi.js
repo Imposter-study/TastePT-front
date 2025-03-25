@@ -5,7 +5,7 @@ import { getCsrfToken } from "../utils/csrfUtils";
 const chatbotAPI = axios.create({
   ...baseAPI.defaults,
   baseURL: `${baseAPI.defaults.baseURL}chatbot/`,
-  timeout: 15000, // 15초
+  timeout: 0 , // timeout 적용 안함
   withCredentials: true, // 세션 인증 사용
 });
 
