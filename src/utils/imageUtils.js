@@ -67,3 +67,19 @@ export const urlToImageFile = async (imageUrl, fileName) => {
     throw error;
   }
 };
+
+// 환경에 따른 이미지 url 경로 변경 함수
+export const getImageUrl = (imagePath, defaultImage = '') => {
+  if (!imagePath) return defaultImage;
+  
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  
+  if (import.meta.env.DEV) {
+    const baseURL = import.meta.env.VITE_BASE_URL;
+    return baseURL + imagePath;
+  }
+  
+  return imagePath;
+};

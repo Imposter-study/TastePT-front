@@ -4,6 +4,8 @@ import { useRecoilState } from "recoil";
 import { isAuthenticated, authUser } from "../recoil/authAtom";
 import { privateAccountAPI } from "../api/accountApi";
 import defaultProfile from "../assets/image.png";
+import tastePTLogo from "../assets/tastePT-logo.png";
+import { getImageUrl } from "../utils/imageUtils";
 import tastePTLogo from "../assets/tastePT.png";
 import { commingSoon } from "../utils/commingSoon";
 import { errMessage } from "../utils/errMessage";
@@ -74,11 +76,7 @@ function Navbar() {
               <div className="px-1">
                 <Link to={`/${user.nickname}`}>
                   <img
-                    src={
-                      user.profileImg
-                        ? baseURL + user.profileImg
-                        : defaultProfile
-                    }
+                    src={getImageUrl(user.profileImg, defaultProfile)}
                     alt="profile"
                     className="w-10 h-10 rounded-full object-cover"
                   />

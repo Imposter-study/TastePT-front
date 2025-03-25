@@ -10,6 +10,7 @@ import { privateAccountAPI, publicAccountAPI } from "../../api/accountApi";
 import CheckBox from "../../components/CheckBox";
 import DisabledInput from "../../components/DisabledInput";
 import { errMessage } from "../../utils/errMessage";
+import { getImageUrl } from "../../utils/imageUtils";
 import Loading from "../../components/Loading";
 
 function Mypage() {
@@ -63,7 +64,7 @@ function Mypage() {
         // console.log(response);
         setUserProfile(response.data);
         if (response.data.profile_picture) {
-          setProfileImgUrl(baseURL + response.data.profile_picture);
+          setProfileImgUrl(getImageUrl(response.data.profile_picture));
         }
         setSelectedAllergyList(response.data.allergies);
         setSelectedPreferredCuisineList(response.data.preferred_cuisine);
