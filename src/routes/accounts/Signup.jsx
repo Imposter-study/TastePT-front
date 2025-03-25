@@ -114,7 +114,9 @@ function Signup() {
       .post("", formData)
       .then((response) => {
         // console.log(response);
-        alert("회원가입이 완료되었습니다.");
+        alert(
+          "회원가입이 완료되었습니다.\n이메일 인증을 완료하여 계정을 활성화해주세요"
+        );
         navigate("/");
       })
       .catch((error) => {

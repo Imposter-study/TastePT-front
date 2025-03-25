@@ -6,6 +6,7 @@ import { useSetRecoilState } from "recoil";
 import { isAuthenticated, authUser } from "../../recoil/authAtom";
 import { errMessage } from "../../utils/errMessage";
 import kakaoLogin from "../../assets/Kakao 로그인 배너.png";
+import { commingSoon } from "../../utils/commingSoon";
 
 function Signin() {
   const navigate = useNavigate();
@@ -72,9 +73,14 @@ function Signin() {
             <Button buttonName="Sign in" />
           </div>
         </form>
-        <a className="text-sm underline" href="">
-          Forgot password?
-        </a>
+        <div className="py-1">
+          <span
+            className="text-sm underline cursor-pointer hover:text-gray-500"
+            onClick={commingSoon}
+          >
+            Forgot password?
+          </span>
+        </div>
       </div>
       <div onClick={handleKakaoLogin}>
         <img src={kakaoLogin} alt="kakao-login" />
