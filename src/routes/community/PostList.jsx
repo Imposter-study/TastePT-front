@@ -5,7 +5,7 @@ import defaultImage from "../../assets/no-image.png";
 import { publicCommunityAPI } from "../../api/communityApi";
 import PageNation from "../../components/PageNation";
 import ProtectedButton from "../../components/ProtectedButton";
-
+import Loading from "../../components/Loading";
 function PostList() {
   // 쿼리스트링
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,9 +56,9 @@ function PostList() {
   }, [currentPage, pageSize, searchWord]);
 
   return (
-    <div className="flex flex-col justify-center items-center pt-20">
+    <div className="flex flex-col justify-center items-center pt-20 min-h-screen">
       {loading ? (
-        "Loading..."
+        <Loading text="Loading" />
       ) : (
         <div className="w-5/6 px-10 min-h-screen">
           {/* <h1>PostList</h1> */}

@@ -39,15 +39,15 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
     const isEditComment = window.confirm("댓글을 수정하시겠습니까?");
     if (isEditComment) {
       const commentEditForm = event.target;
-      console.log(commentEditForm["comment-input"].value);
+      // console.log(commentEditForm["comment-input"].value);
 
       commentAPI
         .put(`${commentID}/`, {
           content: commentEditForm["comment-input"].value,
         })
         .then((response) => {
-          console.log(response);
-          console.log("댓글 수정 성공");
+          // console.log(response);
+          // console.log("댓글 수정 성공");
           setComment((prevComment) => ({
             ...prevComment,
             content: response.data.content, // 새로운 내용으로 변경
@@ -56,7 +56,7 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
           setEdit(false);
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
           const errorMessage = errMessage(error);
           alert(errorMessage);
         });
@@ -71,11 +71,12 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
       await commentAPI
         .delete(`${commentID}/`)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           onDeleteSuccess(); // 부모에서 해당 댓글 제거
           alert("댓글이 삭제되었습니다.");
         })
         .catch((error) => {
+          // console.log(error);
           const errorMessage = errMessage(error);
           alert(errorMessage);
         });
@@ -86,14 +87,14 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
   const onMakeReply = (event) => {
     event.preventDefault();
     const replyCommentForm = event.target;
-    console.log(replyCommentForm["reply-input"].value);
+    // console.log(replyCommentForm["reply-input"].value);
     privateCommunityAPI
       .post(`${postID}/comment/`, {
         content: replyCommentForm["reply-input"].value,
         parent: commentID,
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setComment((prevComment) => ({
           ...prevComment,
           reply_comments: [response.data, ...prevComment.reply_comments],
@@ -102,7 +103,7 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
         alert("답글이 작성되었습니다.");
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       });
@@ -124,7 +125,10 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
         <div className="flex">
           <div>
             <img
-              src={getImageUrl(comment.author.profile_picture, defaultProfile)}
+              src={getImageUrl(
+                comment.author.profile_picture,
+                defaultProfile
+              )}
               alt="profile-img"
               className="size-10 m-2 rounded-full object-cover"
             />

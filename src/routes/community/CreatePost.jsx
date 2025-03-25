@@ -56,13 +56,14 @@ const CreatePost = () => {
     privateCommunityAPI
       .post(``, formData)
       .then((response) => {
-        console.log("게시글 저장 성공");
-        console.log(response.data.id);
+        // console.log("게시글 저장 성공");
+        // console.log(response.data);
         const postID = response.data.id;
+        alert("게시글 작성이 완료되었습니다.");
         navigate(`/community/${postID}`);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       });

@@ -2,17 +2,19 @@ import React, { useState, useEffect, useRef } from "react";
 import Button from "../components/Button";
 import { chatbotAPI } from "../api/chatbotApi";
 import { errMessage } from "../utils/errMessage";
+import Loading from "../components/Loading";
+import ReactMarkdown from "react-markdown";
 
 function ChatBot() {
   const messageListRef = useRef(null);
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [isAbled, setIsAbled] = useState(false);
+  const [disable, setDisable] = useState(false);
 
   // 챗봇 메시지 전송 함수
   const handleSendChatbotMessage = async () => {
-    setIsAbled(true);
+    setDisable(true);
     await chatbotAPI
       .post("", {
         question: newMessage,
@@ -24,12 +26,12 @@ function ChatBot() {
         ]);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       })
       .finally(() => {
-        setIsAbled(false);
+        setDisable(false);
       });
   };
 
@@ -75,10 +77,11 @@ function ChatBot() {
               className="max-w-[50%] bg-white border-2 border-gray-300 rounded-md p-2 break-words"
               style={{ wordWrap: "break-word", overflowWrap: "break-word" }}
             >
-              {message.text}
+              <ReactMarkdown>{message.text}</ReactMarkdown>
             </div>
           </div>
         ))}
+        {disable ? <Loading text="맛P.T가 답변을 생성중이에요!" /> : null}
       </div>
     );
   };
@@ -107,9 +110,9 @@ function ChatBot() {
             value={newMessage}
             onChange={handleInputChange}
             onKeyUp={handleKeyUp}
-            placeholder={isAbled ? "챗봇 응답 중..." : "메시지를 입력하세요..."}
+            placeholder={disable ? "챗봇 응답 중..." : "메시지를 입력하세요..."}
             className="w-full p-1 border border-gray-300 rounded-md"
-            disabled={isAbled}
+            disabled={disable}
           />
           <Button buttonName="submit" onClick={handleSendMessage} />
         </div>

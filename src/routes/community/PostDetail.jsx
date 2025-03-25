@@ -11,6 +11,9 @@ import { authUser } from "../../recoil/authAtom";
 import ProtectedButton from "../../components/ProtectedButton";
 import defaultProfile from "../../assets/image.png";
 import { errMessage } from "../../utils/errMessage";
+import SafeHtml from "../../components/SafeHTML";
+import Loading from "../../components/Loading";
+import NotFound from "../../components/NotFound";
 
 function PostDetail() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -20,15 +23,25 @@ function PostDetail() {
   const [post, setPost] = useState({});
   const [comments, setComments] = useState([]);
   const auth = useRecoilValue(authUser);
+  const [notFound, setNotFound] = useState(false);
 
   const navigate = useNavigate();
 
   // 게시글 조회
   const getPost = async () => {
-    const response = await publicCommunityAPI.get(`${postID}/`);
+    const response = await publicCommunityAPI
+      .get(`${postID}/`)
+      .catch((error) => {
+        if (error.response.status === 404) {
+          setNotFound(true);
+        } else {
+          setNotFound(false);
+        }
+      });
     // console.log(response.data);
     setPost(response.data); // 게시글
     setComments(response.data.comments); // 댓글
+    window.scrollTo(0, 0);
     setLoading(false);
   };
 
@@ -36,7 +49,7 @@ function PostDetail() {
   const submitComment = (event) => {
     event.preventDefault();
     const comment = event.target;
-    console.log(comment["comment-input"].value);
+    // console.log(comment["comment-input"].value);
 
     privateCommunityAPI
       .post(`${postID}/comment/`, {
@@ -51,7 +64,7 @@ function PostDetail() {
         // getPost();
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       });
@@ -75,12 +88,13 @@ function PostDetail() {
       privateCommunityAPI
         .delete(`${postID}/`)
         .then((response) => {
-          console.log(response);
-          console.log("게시글 삭제 성공");
+          // console.log(response);
+          // console.log("게시글 삭제 성공");
+          alert("게시글이 삭제되었습니다.");
           navigate("/community");
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
           const errorMessage = errMessage(error);
           alert(errorMessage);
         });
@@ -91,10 +105,14 @@ function PostDetail() {
     getPost();
   }, [postID]);
 
+  if (notFound) {
+    return <NotFound />;
+  }
+
   return (
-    <div className="flex flex-col justify-center items-center pt-20">
+    <div className="flex flex-col justify-center items-center pt-20 min-h-screen">
       {loading ? (
-        "Loading ..."
+        <Loading text="Loading" />
       ) : (
         <div className="w-4/5 min-h-screen">
           {/* 게시글 */}
@@ -141,7 +159,8 @@ function PostDetail() {
               </div>
             )}
           </div>
-          <div
+          <SafeHtml content={post.content} />
+          {/* <div
             className="py-5"
             dangerouslySetInnerHTML={{
               __html: post.content.replace(
@@ -149,7 +168,7 @@ function PostDetail() {
                 `src="${baseURL}/media/`
               ),
             }}
-          />
+          /> */}
 
           {/* 댓글 */}
           <div className="border-t-2 border-gray-300 min-w-[200px]">

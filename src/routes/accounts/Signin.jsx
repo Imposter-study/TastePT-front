@@ -26,8 +26,8 @@ function Signin() {
     publicAccountAPI
       .post(`signin/`, { username, password })
       .then((response) => {
-        console.log(response);
-        console.log("로그인 성공");
+        // console.log(response);
+        // console.log("로그인 성공");
         setIsAuth(true);
         setAuthUser({
           nickname: response.data.nickname,
@@ -36,7 +36,7 @@ function Signin() {
         navigate(redirectedFrom);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         const errorMessage = errMessage(error);
         alert(errorMessage);
       });
@@ -46,10 +46,14 @@ function Signin() {
     privateAccountAPI
       .get(`social/signin/kakao/`)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         window.location.href = response.data.auth_url;
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        // console.log(error);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
+      });
   };
 
   return (
