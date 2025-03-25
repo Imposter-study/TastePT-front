@@ -8,6 +8,7 @@ import { authUser } from "../recoil/authAtom";
 import ProtectedButton from "./ProtectedButton";
 import { errMessage } from "../utils/errMessage";
 import { getImageUrl } from "../utils/imageUtils";
+
 function Comment({ comment: initialComment, onDeleteSuccess }) {
   const baseURL = import.meta.env.VITE_BASE_URL;
   const { postID } = useParams();
@@ -106,6 +107,16 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
         const errorMessage = errMessage(error);
         alert(errorMessage);
       });
+  };
+
+  // 대댓글 삭제
+  const onDeleteReply = (replyID) => {
+    setComment((prevComment) => ({
+      ...prevComment,
+      reply_comments: prevComment.reply_comments.filter(
+        (reply) => reply.id !== replyID
+      ),
+    }));
   };
 
   return (
@@ -215,7 +226,11 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
               <div className="flex flex-col w-full pl-10 p-3">
                 <div>
                   {comment.reply_comments.map((reply) => (
-                    <Comment key={reply.id} comment={reply} />
+                    <Comment
+                      key={reply.id}
+                      comment={reply}
+                      onDeleteSuccess={() => onDeleteReply(reply.id)}
+                    />
                   ))}
                 </div>
               </div>

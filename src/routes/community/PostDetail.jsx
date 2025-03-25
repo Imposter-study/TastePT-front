@@ -58,10 +58,10 @@ function PostDetail() {
       .then((response) => {
         // console.log(response);
         // console.log("댓글 작성 성공");
-        setComments((prev) => [...prev, response.data]); // 새 댓글 추가
+        setComments((prev) => [response.data, ...prev]); // 새 댓글 추가
         comment.reset();
         alert("댓글이 작성되었습니다.");
-        getPost();
+        // getPost();
       })
       .catch((error) => {
         // console.log(error);
