@@ -109,12 +109,16 @@ function ChatBot() {
             type="text"
             value={newMessage}
             onChange={handleInputChange}
-            onKeyUp={handleKeyUp}
+            onKeyUp={disable ? null : handleKeyUp}
             placeholder={disable ? "챗봇 응답 중..." : "메시지를 입력하세요..."}
             className="w-full p-1 border border-gray-300 rounded-md"
             disabled={disable}
           />
-          <Button buttonName="submit" onClick={handleSendMessage} />
+          <Button
+            buttonName="submit"
+            onClick={handleSendMessage}
+            disabled={disable}
+          />
         </div>
       </div>
     </div>

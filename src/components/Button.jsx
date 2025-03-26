@@ -5,6 +5,7 @@ function Button({
   borderColor,
   onClick,
   textSize,
+  disabled,
 }) {
   const btnColorList = {
     black: "bg-black",
@@ -44,6 +45,7 @@ function Button({
         ${borderColorList[borderColor] || "border-black"}
         ${textSizeList[textSize] || "text-sm"}`}
         onClick={onClick}
+        disabled={disabled}
       >
         {buttonName}
       </button>
