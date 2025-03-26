@@ -1,5 +1,6 @@
 import tastePTLogo from "../assets/tastePT-logo.png";
 import styles from "./loading.module.css";
+import PropTypes from "prop-types";
 
 function Loading({ text }) {
   return (
@@ -12,3 +13,7 @@ function Loading({ text }) {
 }
 
 export default Loading;
+
+Loading.propTypes = {
+  text: PropTypes.string.isRequired,
+};

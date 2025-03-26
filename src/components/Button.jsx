@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 function Button({
   buttonName,
   bgColor,
@@ -54,3 +56,12 @@ function Button({
 }
 
 export default Button;
+
+Button.propTypes = {
+  buttonName: PropTypes.string.isRequired,
+  bgColor: PropTypes.string,
+  textColor: PropTypes.string,
+  borderColor: PropTypes.string,
+  onClick: PropTypes.func,
+  textSize: PropTypes.string,
+};

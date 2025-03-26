@@ -1,4 +1,13 @@
-function Input({ inputLabel, isrequired, inputType, value, onChange, defaultValue }) {
+import PropTypes from "prop-types";
+
+function Input({
+  inputLabel,
+  isrequired,
+  inputType,
+  value,
+  onChange,
+  defaultValue,
+}) {
   // 특수문자 및 공백 제거 후 id 생성
   const inputID =
     inputLabel.replace(/[^a-zA-Z0-9]/g, "").toLowerCase() + "-input";
@@ -22,3 +31,12 @@ function Input({ inputLabel, isrequired, inputType, value, onChange, defaultValu
 }
 
 export default Input;
+
+Input.propTypes = {
+  inputLabel: PropTypes.string.isRequired,
+  isrequired: PropTypes.bool,
+  inputType: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  defaultValue: PropTypes.string,
+};

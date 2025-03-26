@@ -1,4 +1,5 @@
 import { useSearchParams } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function PageNation({ totalPostCount, currentPage, onPageChange }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -87,3 +88,9 @@ function PageNation({ totalPostCount, currentPage, onPageChange }) {
 }
 
 export default PageNation;
+
+PageNation.propTypes = {
+  totalPostCount: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+};
