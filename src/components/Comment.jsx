@@ -8,6 +8,7 @@ import { authUser } from "../recoil/authAtom";
 import ProtectedButton from "./ProtectedButton";
 import { errMessage } from "../utils/errMessage";
 import { getImageUrl } from "../utils/imageUtils";
+import PropTypes from "prop-types";
 
 function Comment({ comment: initialComment, onDeleteSuccess }) {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -243,3 +244,8 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
 }
 
 export default Comment;
+
+Comment.propTypes = {
+  comment: PropTypes.object.isRequired,
+  onDeleteSuccess: PropTypes.func.isRequired,
+};

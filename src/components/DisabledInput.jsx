@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 function DisabledInput({ inputLabel, inputValue }) {
   // 특수문자 및 공백 제거 후 id 생성
   const inputID =
@@ -18,3 +20,8 @@ function DisabledInput({ inputLabel, inputValue }) {
 }
 
 export default DisabledInput;
+
+DisabledInput.propTypes = {
+  inputLabel: PropTypes.string.isRequired,
+  inputValue: PropTypes.string.isRequired,
+};

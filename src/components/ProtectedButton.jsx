@@ -1,6 +1,7 @@
 import { useRecoilValue } from "recoil";
 import { isAuthenticated } from "../recoil/authAtom";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function ProtectedButton({ to, children }) {
   const isAuth = useRecoilValue(isAuthenticated);
@@ -24,3 +25,8 @@ function ProtectedButton({ to, children }) {
 }
 
 export default ProtectedButton;
+
+ProtectedButton.propTypes = {
+  to: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+};

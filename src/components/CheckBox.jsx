@@ -1,7 +1,9 @@
+import PropTypes from "prop-types";
+
 function CheckBox({
   boxTitle,
   componentList,
-  defaultChecked=false,
+  defaultChecked = false,
   disabled,
   selectedData,
   defaultList = [],
@@ -23,7 +25,9 @@ function CheckBox({
             <input
               type="checkbox"
               className="hidden peer"
-              defaultChecked={defaultChecked ? true : defaultList.includes(component)}
+              defaultChecked={
+                defaultChecked ? true : defaultList.includes(component)
+              }
               disabled={disabled}
               onChange={(e) => handleChange(component, e.target.checked)}
             />
@@ -38,3 +42,12 @@ function CheckBox({
 }
 
 export default CheckBox;
+
+CheckBox.propTypes = {
+  boxTitle: PropTypes.string.isRequired,
+  componentList: PropTypes.array.isRequired,
+  defaultChecked: PropTypes.bool,
+  disabled: PropTypes.bool,
+  selectedData: PropTypes.func.isRequired,
+  defaultList: PropTypes.array,
+};
