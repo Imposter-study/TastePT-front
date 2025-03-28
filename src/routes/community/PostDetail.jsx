@@ -14,6 +14,7 @@ import { errMessage } from "../../utils/errMessage";
 import SafeHtml from "../../components/SafeHTML";
 import Loading from "../../components/Loading";
 import NotFound from "../../components/NotFound";
+import reportIcon from "../../assets/alarm.png";
 
 function PostDetail() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -101,6 +102,25 @@ function PostDetail() {
     }
   };
 
+
+  // 게시글 신고
+  const handleReport = () => {
+    const reportConfirm = window.confirm("해당 게시글을 신고 하시겠습니까?");
+    if (reportConfirm) {
+      privateCommunityAPI.post(`${postID}/report/`, {"type":"post"})
+        .then((response) => {
+          // console.log(response);
+          // console.log("게시글 신고 성공");
+          alert("게시글이 신고되었습니다.");
+        })
+        .catch((error) => {
+          // console.log(error);
+          const errorMessage = errMessage(error);
+          alert(errorMessage);
+        });
+    }
+  }
+
   useEffect(() => {
     getPost();
   }, [postID]);
@@ -170,6 +190,9 @@ function PostDetail() {
             }}
           /> */}
 
+          <div onClick={handleReport} className="flex justify-end items-center pb-1">
+            <img src={reportIcon} className="size-5 cursor-pointer hover:scale-125" />
+          </div>
           {/* 댓글 */}
           <div className="border-t-2 border-gray-300 min-w-[200px]">
             <div className="py-5 m-1">
