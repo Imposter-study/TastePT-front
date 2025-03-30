@@ -9,6 +9,7 @@ import ProtectedButton from "./ProtectedButton";
 import { errMessage } from "../utils/errMessage";
 import { getImageUrl } from "../utils/imageUtils";
 import PropTypes from "prop-types";
+import reportIcon from "../assets/alarm.png";
 
 function Comment({ comment: initialComment, onDeleteSuccess }) {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -120,16 +121,32 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
     }));
   };
 
+  // 댓글 신고
+  const handleReport = (commentID) => {
+    const reportConfirm = window.confirm("해당 댓글을 신고 하시겠습니까?");
+    if (reportConfirm) {
+      privateCommunityAPI
+        .post(`${commentID}/report/`, { type: "comment" })
+        .then((response) => {
+          // console.log(response);
+          // console.log("게시글 신고 성공");
+          alert("댓글이 신고되었습니다.");
+        })
+        .catch((error) => {
+          // console.log(error);
+          const errorMessage = errMessage(error);
+          alert(errorMessage);
+        });
+    }
+  };
+
   return (
     <div className="flex items-center pb-2 mb-3 min-w-[300px]">
-      <div>
-        <div className="flex">
+      <div className="w-full">
+        <div className="flex w-full">
           <div>
             <img
-              src={getImageUrl(
-                comment.author.profile_picture,
-                defaultProfile
-              )}
+              src={getImageUrl(comment.author.profile_picture, defaultProfile)}
               alt="profile-img"
               className="size-10 m-2 rounded-full object-cover"
             />
@@ -163,40 +180,49 @@ function Comment({ comment: initialComment, onDeleteSuccess }) {
             ) : (
               <p>{comment.content}</p>
             )}
-            <div className="flex text-sm cursor-pointer">
-              {comment.parent !== null ? null : (
-                <span
-                  className="hover:text-purple-500 text-lg pr-1"
-                  onClick={handleMakeReplyMode}
-                >
-                  💬
-                </span>
-              )}
-              {auth.nickname !== comment.author.nickname ? null : (
-                <div>
-                  {isEdit ? (
-                    <span
-                      className="hover:text-purple-500 pr-1"
-                      onClick={handleEditMode}
-                    >
-                      [수정 취소]
-                    </span>
-                  ) : (
-                    <span
-                      className="hover:text-purple-500 pr-1"
-                      onClick={handleEditMode}
-                    >
-                      [수정]
-                    </span>
-                  )}
+            <div className="flex justify-between text-sm cursor-pointer">
+              <div className="flex">
+                {comment.parent !== null ? null : (
                   <span
-                    className="hover:text-purple-500 pr-1"
-                    onClick={onDelete}
+                    className="hover:scale-125 text-lg pr-1"
+                    onClick={handleMakeReplyMode}
                   >
-                    [삭제]
+                    💬
                   </span>
-                </div>
-              )}
+                )}
+                {auth.nickname !== comment.author.nickname ? null : (
+                  <div className="flex items-center">
+                    {isEdit ? (
+                      <span
+                        className="hover:text-purple-500 pr-1"
+                        onClick={handleEditMode}
+                      >
+                        [수정 취소]
+                      </span>
+                    ) : (
+                      <span
+                        className="hover:text-purple-500 pr-1"
+                        onClick={handleEditMode}
+                      >
+                        [수정]
+                      </span>
+                    )}
+                    <span
+                      className="hover:text-purple-500 pr-1"
+                      onClick={onDelete}
+                    >
+                      [삭제]
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div onClick={() => handleReport(comment.id)}>
+                <img
+                  src={reportIcon}
+                  alt="report"
+                  className="size-5 cursor-pointer hover:scale-125"
+                />
+              </div>
             </div>
           </div>
         </div>
