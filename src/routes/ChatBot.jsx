@@ -41,12 +41,9 @@ function ChatBot() {
     //   .finally(() => {
     //     setDisable(false);
     //   });
-    if (socket && messageInput.trim()) {
-      socket.send(JSON.stringify({ message: messageInput }));
-      setMessages((prev) => [
-        ...prev,
-        { sender: "user", message: messageInput },
-      ]);
+    if (chatSocket && newMessage.trim()) {
+      chatSocket.send(JSON.stringify({ message: newMessage }));
+      setMessages((prev) => [...prev, { sender: "user", message: newMessage }]);
       setNewMessage("");
     }
   };
@@ -57,10 +54,10 @@ function ChatBot() {
     if (trimmedMessage) {
       setNewMessage(""); // 메시지 전송 전에 입력창을 먼저 비웁니다
 
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { id: Date.now(), text: trimmedMessage, sender: "user" },
-      ]);
+      // setMessages((prevMessages) => [
+      //   ...prevMessages,
+      //   { id: Date.now(), text: trimmedMessage, sender: "user" },
+      // ]);
     }
     handleSendChatbotMessage();
   };
@@ -82,9 +79,9 @@ function ChatBot() {
   const MessageList = () => {
     return (
       <div className="message-list flex flex-col space-y-2 overflow-y-auto">
-        {messages.map((message) => (
+        {messages.map((message, idx) => (
           <div
-            key={message.id}
+            key={idx}
             className={`flex w-full ${
               message.sender === "user" ? "justify-end" : "justify-start"
             }`}
@@ -93,7 +90,7 @@ function ChatBot() {
               className="max-w-[50%] bg-white border-2 border-gray-300 rounded-md p-2 break-words"
               style={{ wordWrap: "break-word", overflowWrap: "break-word" }}
             >
-              <ReactMarkdown>{message.text}</ReactMarkdown>
+              <ReactMarkdown>{message.message}</ReactMarkdown>
             </div>
           </div>
         ))}
@@ -142,9 +139,9 @@ function ChatBot() {
   // 웹소켓 연결
   const connectWebSocket = (roomID) => {
     // 기존 연결이 있으면 닫기
+    setIsConnected(false);
     if (chatSocket && chatSocket.readyState == WebSocket.OPEN) {
       chatSocket.close();
-      setIsConnected(false);
     }
 
     // 프로토콜 설정
@@ -153,7 +150,7 @@ function ChatBot() {
 
     // 웹소켓 연결
     const newSocket = new WebSocket(
-      `${wsProtocol}${host}/ws/chatbot/${roomID}/`
+      `${wsProtocol}localhost:8000/ws/chatbot/${roomID}/`
     );
 
     // 연결 열림
@@ -174,9 +171,10 @@ function ChatBot() {
 
       // 채팅 기록 처리
       if (data.type === "chat_history") {
-        setMessages(data.message || []);
-      } else if (data.message) {
-        setMessages((prev) => [...prev, data.message]);
+        setMessages(data.messages || []);
+      } else if (data.message_type === "response") {
+        setMessages((prev) => [...prev, data]);
+        setDisable(false);
       }
     };
 
@@ -186,6 +184,19 @@ function ChatBot() {
 
     setChatSocket(newSocket);
   };
+
+  // // 메시지 추가
+  // function addMessage(message, isUser) {
+  //   const messagesDiv = document.getElementById("chatMessages");
+  //   const messageDiv = document.createElement("div");
+  //   messageDiv.className = `message ${isUser ? "user-message" : "bot-message"}`;
+
+  //   // 메시지 내용 설정
+  //   messageDiv.textContent = isUser ? message : `🤖: ${message}`;
+
+  //   messagesDiv.appendChild(messageDiv);
+  //   messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  // }
 
   useEffect(() => {
     // 메시지가 추가될 때마다 스크롤을 맨 아래로 이동
@@ -198,9 +209,9 @@ function ChatBot() {
   return (
     <div className="chat-container flex justify-center min-h-screen pt-20">
       {/* 채팅방 목록 */}
-      <div className="border-2 border-gray-300 bg-gray-100 rounded-md m-5 p-5">
-        <div className="flex justify-between pb-3 ">Chatroom List</div>
-        <div>
+      <div className="border-2 border-gray-300 bg-gray-100 min-h-[85vh] max-h-[85vh] rounded-md m-5 p-5">
+        <div className="flex justify-between pb-3 ">채팅방 목록</div>
+        <div className="flex">
           <input
             id="chat-room-name"
             placeholder="새 채팅방 이름"
@@ -224,7 +235,7 @@ function ChatBot() {
       </div>
 
       {/* 채팅 */}
-      <div className="flex flex-col w-full border-2 border-gray-300 bg-gray-100 rounded-md m-5 p-5">
+      <div className="flex flex-col w-full min-h-[85vh] max-h-[85vh] border-2 border-gray-300 bg-gray-100 rounded-md m-5 p-5">
         <div className="flex justify-between pb-3 ">
           <div>
             {/* 채팅방 이름 */}
