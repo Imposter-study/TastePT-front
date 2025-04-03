@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import Button from "../components/Button";
 import { chatbotAPI } from "../api/chatbotApi";
@@ -7,6 +6,9 @@ import Loading from "../components/Loading";
 import ReactMarkdown from "react-markdown";
 
 function ChatBot() {
+  const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
+  const host = VITE_BASE_URL.replace("http://", "").replace("http://", "");
+
   const messageListRef = useRef(null);
 
   const [messages, setMessages] = useState([]);
@@ -16,28 +18,37 @@ function ChatBot() {
   const [chatRoomID, setChatRoomID] = useState(null);
   const [chatSocket, setChatSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [chatRoomName, setChatRoomName] = useState(null);
 
   // 챗봇 메시지 전송 함수
   const handleSendChatbotMessage = async () => {
     setDisable(true);
-    await chatbotAPI
-      .post("", {
-        question: newMessage,
-      })
-      .then((response) => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { id: Date.now(), text: response.data.answer, sender: "chatbot" },
-        ]);
-      })
-      .catch((error) => {
-        // console.log(error);
-        const errorMessage = errMessage(error);
-        alert(errorMessage);
-      })
-      .finally(() => {
-        setDisable(false);
-      });
+    // await chatbotAPI
+    //   .post("", {
+    //     question: newMessage,
+    //   })
+    //   .then((response) => {
+    //     setMessages((prevMessages) => [
+    //       ...prevMessages,
+    //       { id: Date.now(), text: response.data.answer, sender: "chatbot" },
+    //     ]);
+    //   })
+    //   .catch((error) => {
+    //     // console.log(error);
+    //     const errorMessage = errMessage(error);
+    //     alert(errorMessage);
+    //   })
+    //   .finally(() => {
+    //     setDisable(false);
+    //   });
+    if (socket && messageInput.trim()) {
+      socket.send(JSON.stringify({ message: messageInput }));
+      setMessages((prev) => [
+        ...prev,
+        { sender: "user", message: messageInput },
+      ]);
+      setNewMessage("");
+    }
   };
 
   // 메시지 전송 함수
@@ -96,7 +107,7 @@ function ChatBot() {
     chatbotAPI
       .get("room/")
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setChatRoomList(response.data);
       })
       .catch((error) => {
@@ -121,6 +132,13 @@ function ChatBot() {
       });
   };
 
+  const selectChatRoom = (roomID) => {
+    setChatRoomID(roomID);
+    const chatroom = chatRoomList.find((chatroom) => chatroom.id === roomID);
+    setChatRoomName(chatroom.name);
+    connectWebSocket(roomID);
+  };
+
   // 웹소켓 연결
   const connectWebSocket = (roomID) => {
     // 기존 연결이 있으면 닫기
@@ -135,7 +153,7 @@ function ChatBot() {
 
     // 웹소켓 연결
     const newSocket = new WebSocket(
-      `${wsProtocol}${window.location.host}/ws/chatbot/${roomID}/`
+      `${wsProtocol}${host}/ws/chatbot/${roomID}/`
     );
 
     // 연결 열림
@@ -166,7 +184,7 @@ function ChatBot() {
       console.log("웹소켓 오류 :", error);
     };
 
-    setSocket(newSocket);
+    setChatSocket(newSocket);
   };
 
   useEffect(() => {
@@ -196,8 +214,7 @@ function ChatBot() {
               key={chatroom.id}
               className="p-1 hover:scale-110 hover:shadow"
               onClick={() => {
-                setChatRoomID(chatroom.id);
-                connectWebSocket(chatroom.id);
+                selectChatRoom(chatroom.id);
               }}
             >
               {chatroom.name}
@@ -212,13 +229,13 @@ function ChatBot() {
           <div>
             {/* 채팅방 이름 */}
             {chatRoomID ? (
-              <div>{chatRoomID}</div>
+              <div>{chatRoomName}</div>
             ) : (
               <div>채팅방을 선택해주세요</div>
             )}
           </div>
           <div className="bg-white text-sm rounded-full text-gray-400 p-1">
-            연결상태:{" "}
+            연결상태:{isConnected ? " ✅연결됨" : " ❌연결끊김"}
           </div>
         </div>
         <hr className="border-gray-400" />
