@@ -3,9 +3,9 @@ import Button from "./Button";
 import { useRecoilState } from "recoil";
 import { isAuthenticated, authUser } from "../recoil/authAtom";
 import { privateAccountAPI } from "../api/accountApi";
-import defaultProfile from "../assets/image.png";
+import defaultProfile from "../assets/image.webp";
 import { getImageUrl } from "../utils/imageUtils";
-import tastePTLogo from "../assets/tastePT.png";
+import tastePTLogo from "../assets/tastePT.webp";
 import { commingSoon } from "../utils/commingSoon";
 import { errMessage } from "../utils/errMessage";
 
@@ -45,7 +45,7 @@ function Navbar() {
             <img
               src={tastePTLogo}
               alt="tastePT-logo"
-              className="size-15 object-cover"
+              className="w-15 h-15 object-cover"
             />
           </div>
         </Link>
