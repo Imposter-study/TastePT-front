@@ -224,6 +224,24 @@ function ChatBot() {
       });
   };
 
+  const deleteChatRoom = (roomID) => {
+    const deleteConfirm = window.confirm("채팅방을 삭제하시겠습니까?");
+
+    if (deleteConfirm) {
+      chatbotAPI
+        .delete(`room/${roomID}/`)
+        .then((response) => {
+          console.log(response);
+          setChatRoomList((prev) =>
+            prev.filter((chatroom) => chatroom.id !== roomID)
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   useEffect(() => {
     // 메시지가 추가될 때마다 스크롤을 맨 아래로 이동
     if (messageListRef.current) {
@@ -282,7 +300,12 @@ function ChatBot() {
                 >
                   ✎
                 </span>
-                <span className="hover:scale-120 cursor-pointer">X</span>
+                <span
+                  className="hover:scale-120 cursor-pointer"
+                  onClick={() => deleteChatRoom(chatroom.id)}
+                >
+                  X
+                </span>
               </div>
             </div>
           ))}
