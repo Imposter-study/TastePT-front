@@ -19,6 +19,7 @@ function ChatBot() {
   const [chatSocket, setChatSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [chatRoomName, setChatRoomName] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
 
   // 챗봇 메시지 전송 함수
   const handleSendChatbotMessage = async () => {
@@ -198,6 +199,31 @@ function ChatBot() {
   //   messagesDiv.scrollTop = messagesDiv.scrollHeight;
   // }
 
+  const editChatRoomName = (event, roomID) => {
+    event.preventDefault();
+    console.log(event.target["edit-chat-room"].value);
+    const newChatRoomName = event.target["edit-chat-room"].value;
+    console.log("roomID: ", roomID);
+    chatbotAPI
+      .put(`room/${roomID}/`, { name: newChatRoomName })
+      .then((response) => {
+        console.log(response);
+        setChatRoomList((prev) =>
+          prev.map((chatroom) =>
+            chatroom.id === roomID
+              ? { ...chatroom, name: newChatRoomName }
+              : chatroom
+          )
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsEdit(false);
+      });
+  };
+
   useEffect(() => {
     // 메시지가 추가될 때마다 스크롤을 맨 아래로 이동
     if (messageListRef.current) {
@@ -223,12 +249,41 @@ function ChatBot() {
           {chatRoomList.map((chatroom) => (
             <div
               key={chatroom.id}
-              className="p-1 hover:scale-110 hover:shadow"
-              onClick={() => {
-                selectChatRoom(chatroom.id);
-              }}
+              className="p-1 hover:shadow flex justify-between"
+              onClick={
+                isEdit
+                  ? null
+                  : () => {
+                      selectChatRoom(chatroom.id);
+                    }
+              }
             >
-              {chatroom.name}
+              {isEdit === chatroom.id ? (
+                <form
+                  onSubmit={(event) => {
+                    editChatRoomName(event, chatroom.id);
+                  }}
+                >
+                  <input
+                    id="edit-chat-room"
+                    className="border"
+                    defaultValue={chatroom.name}
+                  />
+                </form>
+              ) : (
+                `${chatroom.name}`
+              )}
+              <div className="flex gap-2">
+                <span
+                  className="hover:scale-120 cursor-pointer"
+                  onClick={() => {
+                    setIsEdit(chatroom.id);
+                  }}
+                >
+                  ✎
+                </span>
+                <span className="hover:scale-120 cursor-pointer">X</span>
+              </div>
             </div>
           ))}
         </div>
