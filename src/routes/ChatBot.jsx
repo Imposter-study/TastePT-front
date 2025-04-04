@@ -7,7 +7,6 @@ import ReactMarkdown from "react-markdown";
 
 function ChatBot() {
   const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
-  let host = VITE_BASE_URL.replace("http://", "").replace("http://", "");
 
   const messageListRef = useRef(null);
 
@@ -87,6 +86,8 @@ function ChatBot() {
       })
       .catch((error) => {
         console.log(error);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
       });
   };
 
@@ -104,9 +105,12 @@ function ChatBot() {
       })
       .catch((error) => {
         console.log(error);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
       });
   };
 
+  // 채팅방 선택
   const selectChatRoom = (roomID) => {
     setChatRoomID(roomID);
     const chatroom = chatRoomList.find((chatroom) => chatroom.id === roomID);
@@ -127,7 +131,7 @@ function ChatBot() {
     let HOST;
     if (window.location.protocol === "https") {
       wsProtocol = "wss://";
-      HOST = import.meta.env.VITE_BASE_URL.replace("https://", "");
+      HOST = VITE_BASE_URL.replace("https://", "");
     } else {
       wsProtocol = "ws://";
       HOST = "localhost:8000";
@@ -152,7 +156,7 @@ function ChatBot() {
 
     newSocket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
+      // console.log(data);
 
       // 채팅 기록 처리
       if (data.type === "chat_history") {
@@ -189,6 +193,8 @@ function ChatBot() {
       })
       .catch((error) => {
         console.log(error);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
       })
       .finally(() => {
         setIsEdit(false);
@@ -209,6 +215,8 @@ function ChatBot() {
         })
         .catch((error) => {
           console.log(error);
+          const errorMessage = errMessage(error);
+          alert(errorMessage);
         });
     }
   };
@@ -239,13 +247,9 @@ function ChatBot() {
             <div
               key={chatroom.id}
               className="p-1 hover:shadow flex justify-between"
-              onClick={
-                isEdit
-                  ? null
-                  : () => {
-                      selectChatRoom(chatroom.id);
-                    }
-              }
+              onClick={() => {
+                if (isEdit !== chatroom.id) selectChatRoom(chatroom.id);
+              }}
             >
               {isEdit === chatroom.id ? (
                 <form
