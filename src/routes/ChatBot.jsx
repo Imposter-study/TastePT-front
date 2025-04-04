@@ -7,7 +7,7 @@ import ReactMarkdown from "react-markdown";
 
 function ChatBot() {
   const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
-  const host = VITE_BASE_URL.replace("http://", "").replace("http://", "");
+  let host = VITE_BASE_URL.replace("http://", "").replace("http://", "");
 
   const messageListRef = useRef(null);
 
@@ -24,24 +24,6 @@ function ChatBot() {
   // 챗봇 메시지 전송 함수
   const handleSendChatbotMessage = async () => {
     setDisable(true);
-    // await chatbotAPI
-    //   .post("", {
-    //     question: newMessage,
-    //   })
-    //   .then((response) => {
-    //     setMessages((prevMessages) => [
-    //       ...prevMessages,
-    //       { id: Date.now(), text: response.data.answer, sender: "chatbot" },
-    //     ]);
-    //   })
-    //   .catch((error) => {
-    //     // console.log(error);
-    //     const errorMessage = errMessage(error);
-    //     alert(errorMessage);
-    //   })
-    //   .finally(() => {
-    //     setDisable(false);
-    //   });
     if (chatSocket && newMessage.trim()) {
       chatSocket.send(JSON.stringify({ message: newMessage }));
       setMessages((prev) => [...prev, { sender: "user", message: newMessage }]);
@@ -54,11 +36,6 @@ function ChatBot() {
     const trimmedMessage = newMessage.trim();
     if (trimmedMessage) {
       setNewMessage(""); // 메시지 전송 전에 입력창을 먼저 비웁니다
-
-      // setMessages((prevMessages) => [
-      //   ...prevMessages,
-      //   { id: Date.now(), text: trimmedMessage, sender: "user" },
-      // ]);
     }
     handleSendChatbotMessage();
   };
@@ -145,13 +122,20 @@ function ChatBot() {
       chatSocket.close();
     }
 
-    // 프로토콜 설정
-    const wsProtocol =
-      window.location.protocol === "https" ? "wss://" : "ws://";
+    // 프로토콜 및 호스트 설정
+    let wsProtocol;
+    let HOST;
+    if (window.location.protocol === "https") {
+      wsProtocol = "wss://";
+      HOST = import.meta.env.VITE_BASE_URL.replace("https://", "");
+    } else {
+      wsProtocol = "ws://";
+      HOST = "localhost:8000";
+    }
 
     // 웹소켓 연결
     const newSocket = new WebSocket(
-      `${wsProtocol}localhost:8000/ws/chatbot/${roomID}/`
+      `${wsProtocol}${HOST}/ws/chatbot/${roomID}/`
     );
 
     // 연결 열림
@@ -185,19 +169,6 @@ function ChatBot() {
 
     setChatSocket(newSocket);
   };
-
-  // // 메시지 추가
-  // function addMessage(message, isUser) {
-  //   const messagesDiv = document.getElementById("chatMessages");
-  //   const messageDiv = document.createElement("div");
-  //   messageDiv.className = `message ${isUser ? "user-message" : "bot-message"}`;
-
-  //   // 메시지 내용 설정
-  //   messageDiv.textContent = isUser ? message : `🤖: ${message}`;
-
-  //   messagesDiv.appendChild(messageDiv);
-  //   messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  // }
 
   const editChatRoomName = (event, roomID) => {
     event.preventDefault();
