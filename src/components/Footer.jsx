@@ -1,5 +1,5 @@
 import notionIcon from "../assets/notion-icon.webp";
-import githubIcon from "../assets/github-icon.png";
+import githubIcon from "../assets/github-icon.webp";
 import { useNavigate } from "react-router-dom";
 import { commingSoon } from "../utils/commingSoon";
 
@@ -29,7 +29,7 @@ function Footer() {
           </span>
         </p>
         <p>Email : imposterstudy@gmail.com</p>
-        <p>Copyright ⓒ 2025. ImposterStudy All rights reserved.</p>
+        <p>ⓒ 2025. ImposterStudy All rights reserved.</p>
       </div>
       <div className="flex gap-3 p-5">
         <a
@@ -39,7 +39,7 @@ function Footer() {
           <img
             src={notionIcon}
             alt="notion-icon"
-            className="size-6 object-cover"
+            className="w-6 h-6 object-cover"
           />
         </a>
         <a
@@ -49,7 +49,7 @@ function Footer() {
           <img
             src={githubIcon}
             alt="github-icon"
-            className="size-6 object-cover"
+            className="w-6 h-6 object-cover"
           />
         </a>
       </div>
