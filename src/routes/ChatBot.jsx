@@ -6,33 +6,28 @@ import Loading from "../components/Loading";
 import ReactMarkdown from "react-markdown";
 
 function ChatBot() {
+  const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
+
   const messageListRef = useRef(null);
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [disable, setDisable] = useState(false);
+  const [chatRoomList, setChatRoomList] = useState([]);
+  const [chatRoomID, setChatRoomID] = useState(null);
+  const [chatSocket, setChatSocket] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [chatRoomName, setChatRoomName] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
 
   // 챗봇 메시지 전송 함수
   const handleSendChatbotMessage = async () => {
     setDisable(true);
-    await chatbotAPI
-      .post("", {
-        question: newMessage,
-      })
-      .then((response) => {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { id: Date.now(), text: response.data.answer, sender: "chatbot" },
-        ]);
-      })
-      .catch((error) => {
-        // console.log(error);
-        const errorMessage = errMessage(error);
-        alert(errorMessage);
-      })
-      .finally(() => {
-        setDisable(false);
-      });
+    if (chatSocket && newMessage.trim()) {
+      chatSocket.send(JSON.stringify({ message: newMessage }));
+      setMessages((prev) => [...prev, { sender: "user", message: newMessage }]);
+      setNewMessage("");
+    }
   };
 
   // 메시지 전송 함수
@@ -40,11 +35,6 @@ function ChatBot() {
     const trimmedMessage = newMessage.trim();
     if (trimmedMessage) {
       setNewMessage(""); // 메시지 전송 전에 입력창을 먼저 비웁니다
-
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { id: Date.now(), text: trimmedMessage, sender: "user" },
-      ]);
     }
     handleSendChatbotMessage();
   };
@@ -66,9 +56,9 @@ function ChatBot() {
   const MessageList = () => {
     return (
       <div className="message-list flex flex-col space-y-2 overflow-y-auto">
-        {messages.map((message) => (
+        {messages.map((message, idx) => (
           <div
-            key={message.id}
+            key={idx}
             className={`flex w-full ${
               message.sender === "user" ? "justify-end" : "justify-start"
             }`}
@@ -77,7 +67,7 @@ function ChatBot() {
               className="max-w-[50%] bg-white border-2 border-gray-300 rounded-md p-2 break-words"
               style={{ wordWrap: "break-word", overflowWrap: "break-word" }}
             >
-              <ReactMarkdown>{message.text}</ReactMarkdown>
+              <ReactMarkdown>{message.message}</ReactMarkdown>
             </div>
           </div>
         ))}
@@ -86,16 +76,233 @@ function ChatBot() {
     );
   };
 
+  // 채팅방 목록 가져오기
+  const getChatRoomList = () => {
+    chatbotAPI
+      .get("room/")
+      .then((response) => {
+        // console.log(response);
+        setChatRoomList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
+      });
+  };
+
+  // 채팅방 생성
+  const createChatRoom = () => {
+    const chatRoomName = document.getElementById("chat-room-name").value.trim();
+    console.log(chatRoomName);
+    chatbotAPI
+      .post("room/", { name: chatRoomName })
+      .then((response) => {
+        console.log(response);
+        setChatRoomList((prev) => {
+          return [response.data, ...prev];
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
+      });
+  };
+
+  // 채팅방 선택
+  const selectChatRoom = (roomID) => {
+    setChatRoomID(roomID);
+    const chatroom = chatRoomList.find((chatroom) => chatroom.id === roomID);
+    setChatRoomName(chatroom.name);
+    connectWebSocket(roomID);
+  };
+
+  // 웹소켓 연결
+  const connectWebSocket = (roomID) => {
+    // 기존 연결이 있으면 닫기
+    setIsConnected(false);
+    if (chatSocket && chatSocket.readyState == WebSocket.OPEN) {
+      chatSocket.close();
+    }
+
+    // 프로토콜 및 호스트 설정
+    let wsProtocol;
+    let HOST;
+    if (window.location.protocol === "https") {
+      wsProtocol = "wss://";
+      HOST = VITE_BASE_URL.replace("https://", "");
+    } else {
+      wsProtocol = "ws://";
+      HOST = "localhost:8000";
+    }
+
+    // 웹소켓 연결
+    const newSocket = new WebSocket(
+      `${wsProtocol}${HOST}/ws/chatbot/${roomID}/`
+    );
+
+    // 연결 열림
+    newSocket.onopen = () => {
+      setIsConnected(true);
+      console.log("웹소켓 연결됨");
+    };
+
+    // 연결 닫힘
+    newSocket.onclose = () => {
+      setIsConnected(false);
+      console.log("웹소켓 연결 끊김");
+    };
+
+    newSocket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      // console.log(data);
+
+      // 채팅 기록 처리
+      if (data.type === "chat_history") {
+        setMessages(data.messages || []);
+      } else if (data.message_type === "response") {
+        setMessages((prev) => [...prev, data]);
+        setDisable(false);
+      }
+    };
+
+    newSocket.onerror = (error) => {
+      console.log("웹소켓 오류 :", error);
+    };
+
+    setChatSocket(newSocket);
+  };
+
+  const editChatRoomName = (event, roomID) => {
+    event.preventDefault();
+    console.log(event.target["edit-chat-room"].value);
+    const newChatRoomName = event.target["edit-chat-room"].value;
+    console.log("roomID: ", roomID);
+    chatbotAPI
+      .put(`room/${roomID}/`, { name: newChatRoomName })
+      .then((response) => {
+        console.log(response);
+        setChatRoomList((prev) =>
+          prev.map((chatroom) =>
+            chatroom.id === roomID
+              ? { ...chatroom, name: newChatRoomName }
+              : chatroom
+          )
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+        const errorMessage = errMessage(error);
+        alert(errorMessage);
+      })
+      .finally(() => {
+        setIsEdit(false);
+      });
+  };
+
+  const deleteChatRoom = (roomID) => {
+    const deleteConfirm = window.confirm("채팅방을 삭제하시겠습니까?");
+
+    if (deleteConfirm) {
+      chatbotAPI
+        .delete(`room/${roomID}/`)
+        .then((response) => {
+          console.log(response);
+          setChatRoomList((prev) =>
+            prev.filter((chatroom) => chatroom.id !== roomID)
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+          const errorMessage = errMessage(error);
+          alert(errorMessage);
+        });
+    }
+  };
+
   useEffect(() => {
     // 메시지가 추가될 때마다 스크롤을 맨 아래로 이동
     if (messageListRef.current) {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
+    getChatRoomList();
   }, [messages]); // 메시지가 변경될 때마다
 
   return (
-    <div className="chat-container flex justify-center items-center min-h-screen pt-20">
-      <div className="flex flex-col w-full min-h-[75vh] max-h-[75vh] border-2 border-gray-300 bg-gray-100 rounded-md m-5 p-5">
+    <div className="chat-container flex justify-center min-h-screen pt-20">
+      {/* 채팅방 목록 */}
+      <div className="border-2 border-gray-300 bg-gray-100 min-h-[85vh] max-h-[85vh] rounded-md m-5 p-5">
+        <div className="flex justify-between pb-3 ">채팅방 목록</div>
+        <div className="flex">
+          <input
+            id="chat-room-name"
+            placeholder="새 채팅방 이름"
+            className="border-2 border-gray-300 rounded-md p-1"
+          />
+          <Button buttonName="방 만들기" onClick={createChatRoom} />
+        </div>
+        <div>
+          {chatRoomList.map((chatroom) => (
+            <div
+              key={chatroom.id}
+              className="p-1 hover:shadow flex justify-between"
+              onClick={() => {
+                if (isEdit !== chatroom.id) selectChatRoom(chatroom.id);
+              }}
+            >
+              {isEdit === chatroom.id ? (
+                <form
+                  onSubmit={(event) => {
+                    editChatRoomName(event, chatroom.id);
+                  }}
+                >
+                  <input
+                    id="edit-chat-room"
+                    className="border"
+                    defaultValue={chatroom.name}
+                  />
+                </form>
+              ) : (
+                `${chatroom.name}`
+              )}
+              <div className="flex gap-2">
+                <span
+                  className="hover:scale-120 cursor-pointer"
+                  onClick={() => {
+                    setIsEdit(chatroom.id);
+                  }}
+                >
+                  ✎
+                </span>
+                <span
+                  className="hover:scale-120 cursor-pointer"
+                  onClick={() => deleteChatRoom(chatroom.id)}
+                >
+                  X
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 채팅 */}
+      <div className="flex flex-col w-full min-h-[85vh] max-h-[85vh] border-2 border-gray-300 bg-gray-100 rounded-md m-5 p-5">
+        <div className="flex justify-between pb-3 ">
+          <div>
+            {/* 채팅방 이름 */}
+            {chatRoomID ? (
+              <div>{chatRoomName}</div>
+            ) : (
+              <div>채팅방을 선택해주세요</div>
+            )}
+          </div>
+          <div className="bg-white text-sm rounded-full text-gray-400 p-1">
+            연결상태:{isConnected ? " ✅연결됨" : " ❌연결끊김"}
+          </div>
+        </div>
+        <hr className="border-gray-400" />
         <div
           className="message-list flex-grow overflow-y-auto p-2 "
           ref={messageListRef}
