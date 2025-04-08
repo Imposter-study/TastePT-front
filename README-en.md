@@ -1,4 +1,6 @@
 # TasteP.T
+🇺🇸 English | [🇰🇷 Korean](./README.md)
+
 
 ## Overview
 

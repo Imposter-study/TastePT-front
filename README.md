@@ -1,4 +1,5 @@
 # 맛P.T
+🇰🇷 한국어 | [🇺🇸 English](./README-en.md)
 
 ## 소개
 
