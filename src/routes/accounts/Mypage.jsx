@@ -12,6 +12,7 @@ import DisabledInput from "../../components/DisabledInput";
 import { errMessage } from "../../utils/errMessage";
 import { getImageUrl } from "../../utils/imageUtils";
 import Loading from "../../components/Loading";
+import { useAxios } from "../../hooks/useAxios";
 
 function Mypage() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -23,8 +24,8 @@ function Mypage() {
 
   // useState : 상태 관리
   const [profileImgUrl, setProfileImgUrl] = useState(defaultProfile);
-  const [loading, setLoading] = useState(true);
-  const [userProfile, setUserProfile] = useState({});
+  // const [loading, setLoading] = useState(true);
+  // const [userProfile, setUserProfile] = useState({});
   const [isProfileChanged, setIsProfileChanged] = useState(false);
 
   // useState : 상태 관리
@@ -33,6 +34,8 @@ function Mypage() {
   const [selectedAllergyList, setSelectedAllergyList] = useState([]);
   const [selectedPreferredCuisineList, setSelectedPreferredCuisineList] =
     useState([]);
+
+  const { data, loading } = useAxios(`${user.nickname}/`, privateAccountAPI);
 
   // 알러지 목록 가져오기
   const getAllergyList = () => {
@@ -56,26 +59,26 @@ function Mypage() {
     });
   };
 
-  // 유저 프로필 가져오기
-  const getUserProfile = async () => {
-    try {
-      if (user.nickname) {
-        const response = await privateAccountAPI.get(`${user.nickname}/`);
-        // console.log(response);
-        setUserProfile(response.data);
-        if (response.data.profile_picture) {
-          setProfileImgUrl(getImageUrl(response.data.profile_picture));
-        }
-        setSelectedAllergyList(response.data.allergies);
-        setSelectedPreferredCuisineList(response.data.preferred_cuisine);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error("프로필 정보를 가져오는데 실패했습니다:", error);
-      alert("프로필 정보를 가져오는데 실패했습니다.");
-      setLoading(true);
-    }
-  };
+  // // 유저 프로필 가져오기
+  // const getUserProfile = async () => {
+  //   try {
+  //     if (user.nickname) {
+  //       const response = await privateAccountAPI.get(`${user.nickname}/`);
+  //       // console.log(response);
+  //       setUserProfile(response.data);
+  //       if (response.data.profile_picture) {
+  //         setProfileImgUrl(getImageUrl(response.data.profile_picture));
+  //       }
+  //       setSelectedAllergyList(response.data.allergies);
+  //       setSelectedPreferredCuisineList(response.data.preferred_cuisine);
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("프로필 정보를 가져오는데 실패했습니다:", error);
+  //     alert("프로필 정보를 가져오는데 실패했습니다.");
+  //     setLoading(true);
+  //   }
+  // };
 
   // 프로필 이미지 변경
   const onFileChange = (event) => {
@@ -162,7 +165,7 @@ function Mypage() {
     if (user.nickname) {
       getAllergyList();
       getPreferredCuisineList();
-      getUserProfile();
+      // getUserProfile();
     }
   }, [user.nickname]);
 
@@ -209,16 +212,13 @@ function Mypage() {
           <div className="flex">
             <div className="flex-1 p-5 min-w-[300px] w-full">
               {/* 이메일 */}
-              <DisabledInput
-                inputLabel="Email"
-                inputValue={userProfile.email}
-              />
+              <DisabledInput inputLabel="Email" inputValue={data.email} />
 
               {/* 닉네임 */}
               <Input
                 inputLabel="Nickname"
                 isrequired={true}
-                defaultValue={userProfile.nickname}
+                defaultValue={data.nickname}
               />
 
               {/* 나이 */}
@@ -226,21 +226,21 @@ function Mypage() {
                 inputLabel="Age"
                 isrequired={false}
                 inputType="number"
-                defaultValue={userProfile.age}
+                defaultValue={data.age}
               />
 
               {/* 성별 */}
               <Dropdown
                 dropdownLabel="Gender"
                 options={["M", "F"]}
-                defaultValue={userProfile.gender}
+                defaultValue={data.gender}
               />
 
               {/* 다이어트 여부 */}
               <Dropdown
                 dropdownLabel="Diet"
                 options={["true", "false"]}
-                defaultValue={userProfile.diet ? "true" : "false"}
+                defaultValue={data.diet ? "true" : "false"}
               />
             </div>
             {/* 오른쪽 컨테이너 */}
@@ -250,7 +250,7 @@ function Mypage() {
                 boxTitle="Allergy"
                 componentList={allergyList}
                 selectedData={setSelectedAllergyList}
-                defaultList={userProfile.allergies}
+                defaultList={data.allergies}
               />
 
               {/* 선호 요리 */}
@@ -258,7 +258,7 @@ function Mypage() {
                 boxTitle="Preferred cuisine"
                 componentList={preferredCuisineList}
                 selectedData={setSelectedPreferredCuisineList}
-                defaultList={userProfile.preferred_cuisine}
+                defaultList={data.preferred_cuisine}
               />
             </div>
           </div>

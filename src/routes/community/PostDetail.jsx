@@ -15,36 +15,42 @@ import SafeHtml from "../../components/SafeHTML";
 import Loading from "../../components/Loading";
 import NotFound from "../../components/NotFound";
 import reportIcon from "../../assets/alarm.png";
+import { useAxios } from "../../hooks/useAxios";
 
 function PostDetail() {
   const baseURL = import.meta.env.VITE_BASE_URL;
 
   const { postID } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [post, setPost] = useState({});
+  // const [loading, setLoading] = useState(true);
+  // const [post, setPost] = useState({});
   const [comments, setComments] = useState([]);
   const auth = useRecoilValue(authUser);
-  const [notFound, setNotFound] = useState(false);
+  // const [notFound, setNotFound] = useState(false);
+
+  const { data, loading, notFound } = useAxios(
+    `${postID}/`,
+    publicCommunityAPI
+  );
 
   const navigate = useNavigate();
 
-  // 게시글 조회
-  const getPost = async () => {
-    const response = await publicCommunityAPI
-      .get(`${postID}/`)
-      .catch((error) => {
-        if (error.response.status === 404) {
-          setNotFound(true);
-        } else {
-          setNotFound(false);
-        }
-      });
-    // console.log(response.data);
-    setPost(response.data); // 게시글
-    setComments(response.data.comments); // 댓글
-    window.scrollTo(0, 0);
-    setLoading(false);
-  };
+  // // 게시글 조회
+  // const getPost = async () => {
+  //   const response = await publicCommunityAPI
+  //     .get(`${postID}/`)
+  //     .catch((error) => {
+  //       if (error.response.status === 404) {
+  //         setNotFound(true);
+  //       } else {
+  //         setNotFound(false);
+  //       }
+  //     });
+  //   // console.log(response.data);
+  //   setPost(response.data); // 게시글
+  //   setComments(response.data.comments); // 댓글
+  //   window.scrollTo(0, 0);
+  //   setLoading(false);
+  // };
 
   // 댓글 작성
   const submitComment = (event) => {
@@ -102,12 +108,12 @@ function PostDetail() {
     }
   };
 
-
   // 게시글 신고
   const handleReport = () => {
     const reportConfirm = window.confirm("해당 게시글을 신고 하시겠습니까?");
     if (reportConfirm) {
-      privateCommunityAPI.post(`${postID}/report/`, {"type":"post"})
+      privateCommunityAPI
+        .post(`${postID}/report/`, { type: "post" })
         .then((response) => {
           // console.log(response);
           // console.log("게시글 신고 성공");
@@ -119,11 +125,15 @@ function PostDetail() {
           alert(errorMessage);
         });
     }
-  }
+  };
 
   useEffect(() => {
-    getPost();
-  }, [postID]);
+    // getPost();
+    if (data.comments) {
+      setComments(data.comments); // 댓글
+      window.scrollTo(0, 0);
+    }
+  }, [data]);
 
   if (notFound) {
     return <NotFound />;
@@ -137,27 +147,27 @@ function PostDetail() {
         <div className="w-4/5 min-h-screen">
           {/* 게시글 */}
           <div className="py-5">
-            <h1 className="text-3xl font-bold">{post.title}</h1>
+            <h1 className="text-3xl font-bold">{data.title}</h1>
           </div>
           <div className="flex justify-between items-center gap-2 border-b-2 border-gray-300 pb-5 text-gray-400">
             <div className="flex items-center gap-2">
-              <Link to={`/${post.author.nickname}`}>
+              <Link to={`/${data.author.nickname}`}>
                 <div className="flex items-center gap-2">
                   <img
                     src={
-                      post.author.profile_picture
-                        ? post.author.profile_picture
+                      data.author.profile_picture
+                        ? data.author.profile_picture
                         : defaultProfile
                     }
                     alt="profile"
                     className="size-7 rounded-full"
                   />
-                  <span>{post.author.nickname}</span>
+                  <span>{data.author.nickname}</span>
                 </div>
               </Link>
-              | <span>{post.created_at.slice(0, 10)}</span>
+              | <span>{data.created_at.slice(0, 10)}</span>
             </div>
-            {auth.nickname !== post.author.nickname ? null : (
+            {auth.nickname !== data.author.nickname ? null : (
               <div className="flex justify-end">
                 <div className="pl-1">
                   <Button
@@ -179,7 +189,7 @@ function PostDetail() {
               </div>
             )}
           </div>
-          <SafeHtml content={post.content} />
+          <SafeHtml content={data.content} />
           {/* <div
             className="py-5"
             dangerouslySetInnerHTML={{
@@ -190,8 +200,14 @@ function PostDetail() {
             }}
           /> */}
 
-          <div onClick={handleReport} className="flex justify-end items-center pb-1">
-            <img src={reportIcon} className="size-5 cursor-pointer hover:scale-125" />
+          <div
+            onClick={handleReport}
+            className="flex justify-end items-center pb-1"
+          >
+            <img
+              src={reportIcon}
+              className="size-5 cursor-pointer hover:scale-125"
+            />
           </div>
           {/* 댓글 */}
           <div className="border-t-2 border-gray-300 min-w-[200px]">

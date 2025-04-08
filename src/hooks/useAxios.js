@@ -7,7 +7,7 @@ export function useAxios(endpoint, axiosAPI) {
 
   const get = () => {
     axiosAPI
-      .get(`${endpoint}/`)
+      .get(`${endpoint}`)
       .then((response) => {
         setData(response.data);
         setLoading(false);
