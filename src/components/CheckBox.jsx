@@ -48,6 +48,6 @@ CheckBox.propTypes = {
   componentList: PropTypes.array.isRequired,
   defaultChecked: PropTypes.bool,
   disabled: PropTypes.bool,
-  selectedData: PropTypes.func.isRequired,
+  selectedData: PropTypes.func,
   defaultList: PropTypes.array,
 };
