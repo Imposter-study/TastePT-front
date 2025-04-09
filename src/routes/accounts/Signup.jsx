@@ -8,13 +8,14 @@ import { publicAccountAPI } from "../../api/accountApi";
 import { errMessage } from "../../utils/errMessage";
 import Loading from "../../components/Loading";
 import { useAllergyList } from "../../hooks/useAllergyList";
+import { usePreferredCusisineList } from "../../hooks/usePreferredCuisineList";
 
 function Signup() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [randomNickname, setRandomNickname] = useState("");
   // const [allergyList, setAllergyList] = useState([]);
-  const [preferredCuisineList, setPreferredCuisineList] = useState([]);
+  // const [preferredCuisineList, setPreferredCuisineList] = useState([]);
   const [selectedAllergyList, setSelectedAllergyList] = useState([]);
   const [selectedPreferredCuisineList, setSelectedPreferredCuisineList] =
     useState([]);
@@ -29,18 +30,19 @@ function Signup() {
   // };
 
   const allergyList = useAllergyList(); // 알러지 목록 가져오기
+  const preferredCuisineList = usePreferredCusisineList() // 선호 요리 목록 가져오기
 
-  const getPreferredCuisineList = () => {
-    publicAccountAPI.get("preferredCuisine_list/").then((response) => {
-      // console.log(response);
-      // console.log(response.data);
-      const preferredCuisines = response.data.map(
-        (preferredCuisine) => preferredCuisine.cuisine
-      );
-      setPreferredCuisineList(preferredCuisines);
-      setLoading(false);
-    });
-  };
+  // const getPreferredCuisineList = () => {
+  //   publicAccountAPI.get("preferredCuisine_list/").then((response) => {
+  //     // console.log(response);
+  //     // console.log(response.data);
+  //     const preferredCuisines = response.data.map(
+  //       (preferredCuisine) => preferredCuisine.cuisine
+  //     );
+  //     setPreferredCuisineList(preferredCuisines);
+  //     setLoading(false);
+  //   });
+  // };
 
   // 랜덤 닉네임 생성
   const generateRandomNickname = () => {
@@ -129,9 +131,9 @@ function Signup() {
       });
   };
 
-  useEffect(() => {
-    getPreferredCuisineList();
-  }, []);
+  // useEffect(() => {
+  //   getPreferredCuisineList();
+  // }, []);
 
   return (
     <div className="flex justify-center items-center min-h-screen pt-20">

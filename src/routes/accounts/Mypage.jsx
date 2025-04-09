@@ -14,6 +14,7 @@ import { getImageUrl } from "../../utils/imageUtils";
 import Loading from "../../components/Loading";
 import { useAxios } from "../../hooks/useAxios";
 import { useAllergyList } from "../../hooks/useAllergyList";
+import { usePreferredCusisineList } from "../../hooks/usePreferredCuisineList";
 
 function Mypage() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -29,13 +30,14 @@ function Mypage() {
 
   // useState : 상태 관리
   // const [allergyList, setAllergyList] = useState([]);
-  const [preferredCuisineList, setPreferredCuisineList] = useState([]);
+  // const [preferredCuisineList, setPreferredCuisineList] = useState([]);
   const [selectedAllergyList, setSelectedAllergyList] = useState([]);
   const [selectedPreferredCuisineList, setSelectedPreferredCuisineList] =
     useState([]);
 
   const { data, loading } = useAxios(`${user.nickname}/`, privateAccountAPI); // 유저 데이터 가져오기
   const allergyList = useAllergyList() // 알러지 목록 가져오기
+  const preferredCuisineList = usePreferredCusisineList() // 선호 요리 목록 가져오기
 
   // // 알러지 목록 가져오기
   // const getAllergyList = () => {
@@ -47,17 +49,17 @@ function Mypage() {
   //   });
   // };
 
-  // 선호 요리 목록 가져오기
-  const getPreferredCuisineList = () => {
-    publicAccountAPI.get("preferredCuisine_list/").then((response) => {
-      // console.log(response);
-      // console.log(response.data);
-      const preferredCuisines = response.data.map(
-        (preferredCuisine) => preferredCuisine.cuisine
-      );
-      setPreferredCuisineList(preferredCuisines);
-    });
-  };
+  // // 선호 요리 목록 가져오기
+  // const getPreferredCuisineList = () => {
+  //   publicAccountAPI.get("preferredCuisine_list/").then((response) => {
+  //     // console.log(response);
+  //     // console.log(response.data);
+  //     const preferredCuisines = response.data.map(
+  //       (preferredCuisine) => preferredCuisine.cuisine
+  //     );
+  //     setPreferredCuisineList(preferredCuisines);
+  //   });
+  // };
 
   // // 유저 프로필 가져오기
   // const getUserProfile = async () => {
@@ -164,7 +166,7 @@ function Mypage() {
   useEffect(() => {
     if (user.nickname) {
       // getAllergyList();
-      getPreferredCuisineList();
+      // getPreferredCuisineList();
 
       if (data.allergies) {
         setSelectedAllergyList(data.allergies);
