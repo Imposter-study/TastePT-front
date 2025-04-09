@@ -7,25 +7,28 @@ import { useNavigate } from "react-router-dom";
 import { publicAccountAPI } from "../../api/accountApi";
 import { errMessage } from "../../utils/errMessage";
 import Loading from "../../components/Loading";
+import { useAllergyList } from "../../hooks/useAllergyList";
 
 function Signup() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [randomNickname, setRandomNickname] = useState("");
-  const [allergyList, setAllergyList] = useState([]);
+  // const [allergyList, setAllergyList] = useState([]);
   const [preferredCuisineList, setPreferredCuisineList] = useState([]);
   const [selectedAllergyList, setSelectedAllergyList] = useState([]);
   const [selectedPreferredCuisineList, setSelectedPreferredCuisineList] =
     useState([]);
 
-  const getAllergyList = () => {
-    publicAccountAPI.get("allergies_list/").then((response) => {
-      // console.log(response);
-      // console.log(response.data);
-      const allergies = response.data.map((allergy) => allergy.ingredient);
-      setAllergyList(allergies);
-    });
-  };
+  // const getAllergyList = () => {
+  //   publicAccountAPI.get("allergies_list/").then((response) => {
+  //     // console.log(response);
+  //     // console.log(response.data);
+  //     const allergies = response.data.map((allergy) => allergy.ingredient);
+  //     setAllergyList(allergies);
+  //   });
+  // };
+
+  const allergyList = useAllergyList(); // 알러지 목록 가져오기
 
   const getPreferredCuisineList = () => {
     publicAccountAPI.get("preferredCuisine_list/").then((response) => {
@@ -127,9 +130,7 @@ function Signup() {
   };
 
   useEffect(() => {
-    getAllergyList();
     getPreferredCuisineList();
-    // generateRandomNickname();
   }, []);
 
   return (

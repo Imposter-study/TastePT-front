@@ -13,6 +13,7 @@ import { errMessage } from "../../utils/errMessage";
 import { getImageUrl } from "../../utils/imageUtils";
 import Loading from "../../components/Loading";
 import { useAxios } from "../../hooks/useAxios";
+import { useAllergyList } from "../../hooks/useAllergyList";
 
 function Mypage() {
   const baseURL = import.meta.env.VITE_BASE_URL;
@@ -24,28 +25,27 @@ function Mypage() {
 
   // useState : 상태 관리
   const [profileImgUrl, setProfileImgUrl] = useState(defaultProfile);
-  // const [loading, setLoading] = useState(true);
-  // const [userProfile, setUserProfile] = useState({});
   const [isProfileChanged, setIsProfileChanged] = useState(false);
 
   // useState : 상태 관리
-  const [allergyList, setAllergyList] = useState([]);
+  // const [allergyList, setAllergyList] = useState([]);
   const [preferredCuisineList, setPreferredCuisineList] = useState([]);
   const [selectedAllergyList, setSelectedAllergyList] = useState([]);
   const [selectedPreferredCuisineList, setSelectedPreferredCuisineList] =
     useState([]);
 
-  const { data, loading } = useAxios(`${user.nickname}/`, privateAccountAPI);
+  const { data, loading } = useAxios(`${user.nickname}/`, privateAccountAPI); // 유저 데이터 가져오기
+  const allergyList = useAllergyList() // 알러지 목록 가져오기
 
-  // 알러지 목록 가져오기
-  const getAllergyList = () => {
-    publicAccountAPI.get("allergies_list/").then((response) => {
-      // console.log(response);
-      // console.log(response.data);
-      const allergies = response.data.map((allergy) => allergy.ingredient);
-      setAllergyList(allergies);
-    });
-  };
+  // // 알러지 목록 가져오기
+  // const getAllergyList = () => {
+  //   publicAccountAPI.get("allergies_list/").then((response) => {
+  //     // console.log(response);
+  //     // console.log(response.data);
+  //     const allergies = response.data.map((allergy) => allergy.ingredient);
+  //     setAllergyList(allergies);
+  //   });
+  // };
 
   // 선호 요리 목록 가져오기
   const getPreferredCuisineList = () => {
@@ -163,11 +163,18 @@ function Mypage() {
 
   useEffect(() => {
     if (user.nickname) {
-      getAllergyList();
+      // getAllergyList();
       getPreferredCuisineList();
-      // getUserProfile();
+
+      if (data.allergies) {
+        setSelectedAllergyList(data.allergies);
+        setSelectedPreferredCuisineList(data.preferred_cuisine);
+      }
+      if (data.profile_picture) {
+        setProfileImgUrl(getImageUrl(data.profile_picture));
+      }
     }
-  }, [user.nickname]);
+  }, [user.nickname, data]);
 
   if (loading) {
     return (
