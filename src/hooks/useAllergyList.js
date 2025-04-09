@@ -3,6 +3,7 @@ import { publicAccountAPI } from "../api/accountApi";
 
 export function useAllergyList() {
   const [allergyList, setAllergyList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getAllergyList = () => {
     publicAccountAPI.get("allergies_list/").then((response) => {
@@ -10,6 +11,7 @@ export function useAllergyList() {
       // console.log(response.data);
       const allergies = response.data.map((allergy) => allergy.ingredient);
       setAllergyList(allergies);
+      setLoading(false);
     });
   };
 
@@ -17,5 +19,5 @@ export function useAllergyList() {
     getAllergyList();
   }, []);
 
-  return allergyList;
+  return { allergyList, loading };
 }

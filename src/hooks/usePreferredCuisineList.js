@@ -3,6 +3,7 @@ import { publicAccountAPI } from "../api/accountApi";
 
 export function usePreferredCusisineList() {
   const [preferredCuisineList, setPreferredCuisineList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getPreferredCuisineList = () => {
     publicAccountAPI.get("preferredCuisine_list/").then((response) => {
@@ -12,6 +13,7 @@ export function usePreferredCusisineList() {
         (preferredCuisine) => preferredCuisine.cuisine
       );
       setPreferredCuisineList(preferredCuisines);
+      setLoading(false)
     });
   };
 
@@ -19,5 +21,5 @@ export function usePreferredCusisineList() {
     getPreferredCuisineList();
   }, []);
 
-  return preferredCuisineList;
+  return {preferredCuisineList, loading};
 }
