@@ -6,7 +6,7 @@ import defaultProfile from "../../assets/image.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authUser } from "../../recoil/authAtom";
-import { privateAccountAPI, publicAccountAPI } from "../../api/accountApi";
+import { privateAccountAPI } from "../../api/accountApi";
 import CheckBox from "../../components/CheckBox";
 import DisabledInput from "../../components/DisabledInput";
 import { errMessage } from "../../utils/errMessage";
@@ -29,58 +29,13 @@ function Mypage() {
   const [isProfileChanged, setIsProfileChanged] = useState(false);
 
   // useState : 상태 관리
-  // const [allergyList, setAllergyList] = useState([]);
-  // const [preferredCuisineList, setPreferredCuisineList] = useState([]);
   const [selectedAllergyList, setSelectedAllergyList] = useState([]);
   const [selectedPreferredCuisineList, setSelectedPreferredCuisineList] =
     useState([]);
 
   const { data, loading } = useAxios(`${user.nickname}/`, privateAccountAPI); // 유저 데이터 가져오기
-  const allergyList = useAllergyList() // 알러지 목록 가져오기
-  const preferredCuisineList = usePreferredCusisineList() // 선호 요리 목록 가져오기
-
-  // // 알러지 목록 가져오기
-  // const getAllergyList = () => {
-  //   publicAccountAPI.get("allergies_list/").then((response) => {
-  //     // console.log(response);
-  //     // console.log(response.data);
-  //     const allergies = response.data.map((allergy) => allergy.ingredient);
-  //     setAllergyList(allergies);
-  //   });
-  // };
-
-  // // 선호 요리 목록 가져오기
-  // const getPreferredCuisineList = () => {
-  //   publicAccountAPI.get("preferredCuisine_list/").then((response) => {
-  //     // console.log(response);
-  //     // console.log(response.data);
-  //     const preferredCuisines = response.data.map(
-  //       (preferredCuisine) => preferredCuisine.cuisine
-  //     );
-  //     setPreferredCuisineList(preferredCuisines);
-  //   });
-  // };
-
-  // // 유저 프로필 가져오기
-  // const getUserProfile = async () => {
-  //   try {
-  //     if (user.nickname) {
-  //       const response = await privateAccountAPI.get(`${user.nickname}/`);
-  //       // console.log(response);
-  //       setUserProfile(response.data);
-  //       if (response.data.profile_picture) {
-  //         setProfileImgUrl(getImageUrl(response.data.profile_picture));
-  //       }
-  //       setSelectedAllergyList(response.data.allergies);
-  //       setSelectedPreferredCuisineList(response.data.preferred_cuisine);
-  //       setLoading(false);
-  //     }
-  //   } catch (error) {
-  //     console.error("프로필 정보를 가져오는데 실패했습니다:", error);
-  //     alert("프로필 정보를 가져오는데 실패했습니다.");
-  //     setLoading(true);
-  //   }
-  // };
+  const allergyList = useAllergyList(); // 알러지 목록 가져오기
+  const preferredCuisineList = usePreferredCusisineList(); // 선호 요리 목록 가져오기
 
   // 프로필 이미지 변경
   const onFileChange = (event) => {

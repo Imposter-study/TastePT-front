@@ -7,20 +7,23 @@ import PageNation from "../../components/PageNation";
 import ProtectedButton from "../../components/ProtectedButton";
 import Loading from "../../components/Loading";
 import { useAxios } from "../../hooks/useAxios";
+
 function PostList() {
   // 쿼리스트링
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1; // 현재 페이지
   const pageSize = Number(searchParams.get("page_size")) || 10; // 한 페이지에 보여줄 게시글 수
 
-  // const [loading, setLoading] = useState(true);
-  // const [postList, setPostList] = useState([]);
   const [totalPostCount, setTotalPostCount] = useState(0);
   const [searchWord, setSearchWord] = useState(
     searchParams.get("search") || ""
   );
 
-  const {data, loading} = useAxios(`?page=${currentPage}&page_size=${pageSize}&search=${searchWord}`, publicCommunityAPI )
+  // 게시글 목록 요청(get)
+  const { data, loading } = useAxios(
+    `?page=${currentPage}&page_size=${pageSize}&search=${searchWord}`,
+    publicCommunityAPI
+  );
 
   const handlePageChange = (page) => {
     setSearchParams({ page: page.toString() });
@@ -34,16 +37,6 @@ function PostList() {
     setSearchWord(searchInput);
   };
 
-  // const getPostList = async () => {
-  //   const response = await publicCommunityAPI.get(
-  //     `?page=${currentPage}&page_size=${pageSize}&search=${searchWord}`
-  //   );
-  //   // console.log(response.data);
-  //   setPostList(response.data.results);
-  //   setTotalPostCount(response.data.count);
-  //   setLoading(false);
-  // };
-
   // 내용애서 text만 추출
   const extractString = (htmlString) => {
     const parser = new DOMParser(); // HTML을 DOM 객체로 파싱
@@ -55,7 +48,9 @@ function PostList() {
   };
 
   useEffect(() => {
-    // getPostList();
+    if (data.count) {
+      setTotalPostCount(data.count);
+    }
   }, [currentPage, pageSize, searchWord]);
 
   return (

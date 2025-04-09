@@ -2,7 +2,7 @@ import Button from "../../components/Button";
 import CheckBox from "../../components/CheckBox";
 import Dropdown from "../../components/Dropdown";
 import Input from "../../components/Input";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { publicAccountAPI } from "../../api/accountApi";
 import { errMessage } from "../../utils/errMessage";
@@ -12,37 +12,13 @@ import { usePreferredCusisineList } from "../../hooks/usePreferredCuisineList";
 
 function Signup() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
   const [randomNickname, setRandomNickname] = useState("");
-  // const [allergyList, setAllergyList] = useState([]);
-  // const [preferredCuisineList, setPreferredCuisineList] = useState([]);
   const [selectedAllergyList, setSelectedAllergyList] = useState([]);
   const [selectedPreferredCuisineList, setSelectedPreferredCuisineList] =
     useState([]);
 
-  // const getAllergyList = () => {
-  //   publicAccountAPI.get("allergies_list/").then((response) => {
-  //     // console.log(response);
-  //     // console.log(response.data);
-  //     const allergies = response.data.map((allergy) => allergy.ingredient);
-  //     setAllergyList(allergies);
-  //   });
-  // };
-
-  const allergyList = useAllergyList(); // 알러지 목록 가져오기
-  const preferredCuisineList = usePreferredCusisineList() // 선호 요리 목록 가져오기
-
-  // const getPreferredCuisineList = () => {
-  //   publicAccountAPI.get("preferredCuisine_list/").then((response) => {
-  //     // console.log(response);
-  //     // console.log(response.data);
-  //     const preferredCuisines = response.data.map(
-  //       (preferredCuisine) => preferredCuisine.cuisine
-  //     );
-  //     setPreferredCuisineList(preferredCuisines);
-  //     setLoading(false);
-  //   });
-  // };
+  const {allergyList, loading} = useAllergyList(); // 알러지 목록 가져오기
+  const {preferredCuisineList} = usePreferredCusisineList() // 선호 요리 목록 가져오기
 
   // 랜덤 닉네임 생성
   const generateRandomNickname = () => {
@@ -130,10 +106,6 @@ function Signup() {
         alert(errorMessage);
       });
   };
-
-  // useEffect(() => {
-  //   getPreferredCuisineList();
-  // }, []);
 
   return (
     <div className="flex justify-center items-center min-h-screen pt-20">

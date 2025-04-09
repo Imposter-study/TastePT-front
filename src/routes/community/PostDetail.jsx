@@ -21,36 +21,16 @@ function PostDetail() {
   const baseURL = import.meta.env.VITE_BASE_URL;
 
   const { postID } = useParams();
-  // const [loading, setLoading] = useState(true);
-  // const [post, setPost] = useState({});
   const [comments, setComments] = useState([]);
   const auth = useRecoilValue(authUser);
-  // const [notFound, setNotFound] = useState(false);
 
+  // 게시글 요청
   const { data, loading, notFound } = useAxios(
     `${postID}/`,
     publicCommunityAPI
   );
 
   const navigate = useNavigate();
-
-  // // 게시글 조회
-  // const getPost = async () => {
-  //   const response = await publicCommunityAPI
-  //     .get(`${postID}/`)
-  //     .catch((error) => {
-  //       if (error.response.status === 404) {
-  //         setNotFound(true);
-  //       } else {
-  //         setNotFound(false);
-  //       }
-  //     });
-  //   // console.log(response.data);
-  //   setPost(response.data); // 게시글
-  //   setComments(response.data.comments); // 댓글
-  //   window.scrollTo(0, 0);
-  //   setLoading(false);
-  // };
 
   // 댓글 작성
   const submitComment = (event) => {

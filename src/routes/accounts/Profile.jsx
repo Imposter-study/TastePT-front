@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import DisabledInput from "../../components/DisabledInput";
@@ -17,32 +16,7 @@ import { useAxios } from "../../hooks/useAxios";
 function Profile() {
   const { nickname } = useParams();
   const { data, loading, notFound } = useAxios(`${nickname}/`, publicAccountAPI);
-  // const [loading, setLoading] = useState(true);
-  // const [user, setUser] = useState({});
   const authProfile = useRecoilValue(authUser);
-  // const [notFound, setNotFound] = useState(false);
-
-  // const getProfile = () => {
-  //   publicAccountAPI
-  //     .get(`${nickname}/`)
-  //     .then((response) => {
-  //       setUser(response.data);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       // console.log(error);
-  //       // console.log(error.response.status);
-  //       if (error.response.status === 404) {
-  //         setNotFound(true);
-  //       } else {
-  //         setNotFound(false);
-  //       }
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   getProfile();
-  // }, [nickname]);
 
   if (notFound) {
     return <NotFound />;
