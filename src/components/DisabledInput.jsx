@@ -23,5 +23,5 @@ export default DisabledInput;
 
 DisabledInput.propTypes = {
   inputLabel: PropTypes.string.isRequired,
-  inputValue: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

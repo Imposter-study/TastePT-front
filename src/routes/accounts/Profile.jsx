@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import DisabledInput from "../../components/DisabledInput";
@@ -12,35 +11,12 @@ import { getImageUrl } from "../../utils/imageUtils";
 import { commingSoon } from "../../utils/commingSoon";
 import Loading from "../../components/Loading";
 import NotFound from "../../components/NotFound";
+import { useAxios } from "../../hooks/useAxios";
 
 function Profile() {
   const { nickname } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState({});
+  const { data, loading, notFound } = useAxios(`${nickname}/`, publicAccountAPI);
   const authProfile = useRecoilValue(authUser);
-  const [notFound, setNotFound] = useState(false);
-
-  const getProfile = () => {
-    publicAccountAPI
-      .get(`${nickname}/`)
-      .then((response) => {
-        setUser(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        // console.log(error);
-        // console.log(error.response.status);
-        if (error.response.status === 404) {
-          setNotFound(true);
-        } else {
-          setNotFound(false);
-        }
-      });
-  };
-
-  useEffect(() => {
-    getProfile();
-  }, [nickname]);
 
   if (notFound) {
     return <NotFound />;
@@ -54,7 +30,7 @@ function Profile() {
         <div className="w-fit border-gray-300 m-5">
           <div className="flex flex-col items-center max-w-[150px] pb-2 ">
             <img
-              src={getImageUrl(user.profile_picture, defaultProfile)}
+              src={getImageUrl(data.profile_picture, defaultProfile)}
               alt="프로필 이미지"
               className="size-25 mb-3 rounded-full object-cover"
             />
@@ -67,24 +43,24 @@ function Profile() {
           </div>
           <div className="flex">
             <div>
-              <DisabledInput inputLabel="Email" inputValue={user.email} />
-              <DisabledInput inputLabel="Nickname" inputValue={user.nickname} />
-              <DisabledInput inputLabel="Age" inputValue={user.age || "-"} />
+              <DisabledInput inputLabel="Email" inputValue={data.email} />
+              <DisabledInput inputLabel="Nickname" inputValue={data.nickname} />
+              <DisabledInput inputLabel="Age" inputValue={data.age || "-"} />
               <DisabledInput
                 inputLabel="Gender"
-                inputValue={user.gender || "-"}
+                inputValue={data.gender || "-"}
               />
             </div>
             <div>
               {/* 다이어트 여부 */}
               <DisabledInput
                 inputLabel="Diet"
-                inputValue={user.diet ? "다이어트 중" : "안 다이어트 중"}
+                inputValue={data.diet ? "다이어트 중" : "안 다이어트 중"}
               />
               {/* 선호 요리 */}
               <CheckBox
                 boxTitle="Preferred Cuisine"
-                componentList={user.preferred_cuisine}
+                componentList={data.preferred_cuisine}
                 disabled={true}
                 defaultChecked={true}
               />
@@ -92,13 +68,13 @@ function Profile() {
               {/* 알러지 */}
               <CheckBox
                 boxTitle="Allergy"
-                componentList={user.allergies}
+                componentList={data.allergies}
                 disabled={true}
                 defaultChecked={true}
               />
             </div>
           </div>
-          {authProfile.nickname === user.nickname ? (
+          {authProfile.nickname === data.nickname ? (
             <div className="flex justify-end gap-3">
               <Link to={`/mypage`}>
                 <Button

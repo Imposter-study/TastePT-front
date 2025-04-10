@@ -36,7 +36,7 @@ Input.propTypes = {
   inputLabel: PropTypes.string.isRequired,
   isrequired: PropTypes.bool,
   inputType: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func,
-  defaultValue: PropTypes.string,
+  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
