@@ -34,8 +34,8 @@ function Mypage() {
     useState([]);
 
   const { data, loading } = useAxios(`${user.nickname}/`, privateAccountAPI); // 유저 데이터 가져오기
-  const allergyList = useAllergyList(); // 알러지 목록 가져오기
-  const preferredCuisineList = usePreferredCusisineList(); // 선호 요리 목록 가져오기
+  const { allergyList } = useAllergyList(); // 알러지 목록 가져오기
+  const { preferredCuisineList } = usePreferredCusisineList(); // 선호 요리 목록 가져오기
 
   // 프로필 이미지 변경
   const onFileChange = (event) => {
